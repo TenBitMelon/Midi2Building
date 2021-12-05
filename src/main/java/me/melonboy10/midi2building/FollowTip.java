@@ -42,7 +42,7 @@ public class FollowTip {
         tipLabel.setForeground(Color.CYAN);
         tipLabel.setPadding(5, 5,0, 0);
         tipLabel.setRightShadow(2, 2, Color.WHITE);
-        tipLabel.setFont(ResourceManager.font.deriveFont(18f));
+        //tipLabel.setFont(ResourceManager.font.deriveFont(18f));
         tipLabel.setBackgroundColor(new Color(23,8,23));
         tipLabel.setBorder(new LineBorder(new Color(32,1,76), 2));
         tipLabel.setVerticalAlignment(SwingConstants.TOP);

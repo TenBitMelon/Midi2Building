@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
-
+/**
 public class GeneratorGUI extends JWindow {
 
     public static final int scale = 4;
@@ -60,3 +60,4 @@ public class GeneratorGUI extends JWindow {
         setVisible(true);
     }
 }
+**/
