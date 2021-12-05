@@ -12,11 +12,9 @@ public class ResourceManager {
     public static Font font = null;
     public static BufferedImage backgroundImage, widgetsScaled;
 
-    private static final ClassLoader classLoader = GeneratorGUI.class.getClassLoader();
-
     static {
         try {
-            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, new File(classLoader.getResource("gui/Minecraftia-Regular.ttf").getFile()));
+            Font tempFont = Font.createFont(Font.TRUETYPE_FONT, getResource("gui/Minecraftia-Regular.ttf"));
             GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
             genv.registerFont(tempFont);
             font = tempFont.deriveFont((float) 8 * GeneratorGUI.scale);
@@ -29,6 +27,10 @@ public class ResourceManager {
     }
 
     static BufferedImage readImage(String path) throws IOException {
-        return ImageIO.read(new File(classLoader.getResource(path).getFile()));
+        return ImageIO.read(getResource(path));
+    }
+
+    static File getResource(String path) {
+        return new File("src/main/resources/" + path);
     }
 }

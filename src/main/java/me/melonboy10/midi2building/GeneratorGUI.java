@@ -4,7 +4,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
 
 public class GeneratorGUI extends JWindow {
@@ -44,7 +43,6 @@ public class GeneratorGUI extends JWindow {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Choose Resourcepack Folder");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        fileChooser.setSelectedFile(new File(System.getenv("AppData") + "/.minecraft/resourcepacks"));
         openFileButton.addActionListener(e -> {
             int value = fileChooser.showOpenDialog(rootPane);
 
