@@ -1,7 +1,7 @@
 package me.melonboy10.midi2building;
 
 import javax.swing.*;
-
+/**
 public class WidgetButton extends JButton{
 
     ImageIcon plain, hover, click;
@@ -56,4 +56,4 @@ public class WidgetButton extends JButton{
             setIcon(click);
         }
     }
-}
+}**/
