@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -38,6 +39,8 @@ public class GeneratorApplication extends Application {
         stage.setHeight(backgroundImage.getHeight() / ResourceManager.imageScale * scale);
         stage.initStyle(StageStyle.TRANSPARENT);
 
+        Image atlas = readImage("src/main/resources/gui/BlockAtlas.png");
+
         GridPane parent = new GridPane();
         //parent.getRowConstraints().add(new RowConstraints(backgroundImage.getHeight() / ResourceManager.imageScale * scale / 28));
         for (int i = 0; i < 14; i++) {
@@ -63,14 +66,15 @@ public class GeneratorApplication extends Application {
         GridPane.setValignment(background, VPos.TOP);
 
         //Lever Code
-        ImageView lever = readImageView("src/main/resources/gui/LeverUp.png");
-        lever.setPreserveRatio(true);
-        lever.setFitWidth(readImage("src/main/resources/gui/LeverUp.png").getWidth() / imageScale * scale);
+        Canvas lever = getImageFromAtlas(atlas, BlockAtlas.LEVER_ON);
 
         parent.add(lever,11,6);
-        GridPane.setHalignment(lever, HPos.CENTER);
+        GridPane.setHalignment(lever, HPos.LEFT);
         GridPane.setValignment(lever, VPos.TOP);
         final boolean[] isOn = {false};
+
+//        GridPane.setValignment(lever, VPos.BOTTOM);
+//        lever.setRotate(180);
 
         /**
         Label label = new Label("UWU");
