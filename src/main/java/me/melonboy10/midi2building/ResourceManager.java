@@ -13,7 +13,7 @@ import static me.melonboy10.midi2building.GeneratorApplication.scale;
 
 public class ResourceManager {
 
-    enum BlockAtlas {SIDE_TORCH(0), BOTTOM_TORCH(1), REPEATER(2), LEVER (3), REDSTONE_DOT(4), REDSTONE_LINE(5), LAMP(6);
+    enum BlockAtlas {SIDE_TORCH(0), BOTTOM_TORCH(1), REPEATER_ONE(2), REPEATER_TWO(3), LEVER (4), REDSTONE_DOT(5), REDSTONE_LINE(6), LAMP(7);
         final int column;
         BlockAtlas(int column) {
             this.column = column;
@@ -32,6 +32,7 @@ public class ResourceManager {
             //font = tempFont.deriveFont((float) 8 * GeneratorGUI.scale);
 
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
+            //backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background.png"));
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
             widgetsScaled = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Widgets.png"));
         } catch (IOException ex) {

@@ -76,11 +76,11 @@ public class GeneratorApplication extends Application {
         ToggleableCanvas lamp = new ToggleableCanvas(BlockAtlas.LAMP,false);
         ToggleableCanvas sideTorch = new ToggleableCanvas(BlockAtlas.SIDE_TORCH,true);
         ToggleableCanvas dot = new ToggleableCanvas(BlockAtlas.REDSTONE_DOT,true);
-        ToggleableCanvas repeater1 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
-        ToggleableCanvas repeater2 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
-        ToggleableCanvas repeater3 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
-        ToggleableCanvas bottomTorch = new ToggleableCanvas(BlockAtlas.BOTTOM_TORCH,false);
+        ToggleableCanvas repeater1 = new ToggleableCanvas(BlockAtlas.REPEATER_ONE,true);
+        ToggleableCanvas repeater2 = new ToggleableCanvas(BlockAtlas.REPEATER_ONE,true);
+        ToggleableCanvas repeaterTwoTick = new ToggleableCanvas(BlockAtlas.REPEATER_TWO,true);
         ToggleableCanvas redstoneLine = new ToggleableCanvas(BlockAtlas.REDSTONE_LINE,false);
+        ToggleableCanvas bottomTorch = new ToggleableCanvas(BlockAtlas.BOTTOM_TORCH,false);
 
         parent.add(lever,11,6);
 
@@ -89,9 +89,9 @@ public class GeneratorApplication extends Application {
         parent.add(dot,10,7);
         parent.add(repeater1,9,8);
         parent.add(repeater2,5,8);
-        parent.add(repeater3,4,8);
-        parent.add(bottomTorch,3,7);
-        parent.add(redstoneLine,1,6);
+        parent.add(repeaterTwoTick,3,8);
+        parent.add(redstoneLine,2,8);
+        parent.add(bottomTorch,2,7);
 
         for (ToggleableCanvas toggleable : ToggleableCanvas.toggleables) {
             GridPane.setHalignment(toggleable, HPos.LEFT);
