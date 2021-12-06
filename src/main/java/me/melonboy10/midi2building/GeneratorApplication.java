@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -19,13 +20,16 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 import static me.melonboy10.midi2building.ResourceManager.*;
 
 public class GeneratorApplication extends Application {
 
     public static final int scale = 4;
+
 
     @Override
     public void init() throws Exception {
@@ -39,7 +43,7 @@ public class GeneratorApplication extends Application {
         stage.setHeight(backgroundImage.getHeight() / ResourceManager.imageScale * scale);
         stage.initStyle(StageStyle.TRANSPARENT);
 
-        Image atlas = readImage("src/main/resources/gui/BlockAtlas.png");
+
 
         GridPane parent = new GridPane();
         //parent.getRowConstraints().add(new RowConstraints(backgroundImage.getHeight() / ResourceManager.imageScale * scale / 28));
@@ -65,39 +69,46 @@ public class GeneratorApplication extends Application {
         parent.setGridLinesVisible(true);
         GridPane.setValignment(background, VPos.TOP);
 
-        //Lever Code
-        Canvas lever = getImageFromAtlas(atlas, BlockAtlas.LEVER_ON);
+
+        ToggleableCanvas lever = new ToggleableCanvas(BlockAtlas.LEVER,false);
+        lever.addEventFilter(MouseEvent.MOUSE_CLICKED,leverClicked);
+
+        ToggleableCanvas lamp = new ToggleableCanvas(BlockAtlas.LAMP,false);
+        ToggleableCanvas sideTorch = new ToggleableCanvas(BlockAtlas.SIDE_TORCH,true);
+        ToggleableCanvas dot = new ToggleableCanvas(BlockAtlas.REDSTONE_DOT,true);
+        ToggleableCanvas repeater1 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
+        ToggleableCanvas repeater2 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
+        ToggleableCanvas repeater3 = new ToggleableCanvas(BlockAtlas.REPEATER,true);
+        ToggleableCanvas bottomTorch = new ToggleableCanvas(BlockAtlas.BOTTOM_TORCH,false);
+        ToggleableCanvas redstoneLine = new ToggleableCanvas(BlockAtlas.REDSTONE_LINE,false);
 
         parent.add(lever,11,6);
-        GridPane.setHalignment(lever, HPos.LEFT);
-        GridPane.setValignment(lever, VPos.TOP);
-        final boolean[] isOn = {false};
 
-//        GridPane.setValignment(lever, VPos.BOTTOM);
-//        lever.setRotate(180);
+        parent.add(lamp,12,6);
+        parent.add(sideTorch,10,6);
+        parent.add(dot,10,7);
+        parent.add(repeater1,9,8);
+        parent.add(repeater2,5,8);
+        parent.add(repeater3,4,8);
+        parent.add(bottomTorch,3,7);
+        parent.add(redstoneLine,1,6);
 
-        /**
-        Label label = new Label("UWU");
-
-        Button start = new Button("hello world");
-        //start.setDefaultButton(true);
-        start.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                lever.setRotate(180);
-                if (isOn[0]) {
-                    GridPane.setValignment(lever, VPos.BOTTOM);
-                    isOn[0] = true;
-                } else {
-                    GridPane.setValignment(lever, VPos.TOP);
-                    isOn[0] = false;
-                }
-            }
-        });
-        **/
+        for (ToggleableCanvas toggleable : ToggleableCanvas.toggleables) {
+            GridPane.setHalignment(toggleable, HPos.LEFT);
+            GridPane.setValignment(toggleable, VPos.TOP);
+        }
 
         stage.show();
     }
+
+    EventHandler<MouseEvent> leverClicked = mouseEvent -> {
+        for (ToggleableCanvas toggleable : ToggleableCanvas.toggleables) {
+            toggleable.toggle();
+            if (toggleable.getBlockAtlas() == BlockAtlas.REDSTONE_LINE){
+                toggleable.toggle();
+            }
+        }
+    };
 
     @Override
     public void stop() throws Exception {
