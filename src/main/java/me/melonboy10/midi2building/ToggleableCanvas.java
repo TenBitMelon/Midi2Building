@@ -33,7 +33,6 @@ public class ToggleableCanvas extends Canvas {
     }
 
     public void toggle(){
-        System.out.println("isOn = " + isOn);
         if (isOn) {
             turnOff();
         } else {
@@ -41,14 +40,13 @@ public class ToggleableCanvas extends Canvas {
         }
     }
 
+    //cache on and off textures
     public void turnOn(){
-        System.out.println("WOAH, IT'S ON NOW!");
         getImageFromAtlas(this,atlas, blockAtlas,isOn);
         isOn = true;
     }
 
     public void turnOff(){
-        System.out.println("OH NO, IT'S OFF NOW!");
         getImageFromAtlas(this,atlas, blockAtlas,isOn);
         isOn = false;
     }
