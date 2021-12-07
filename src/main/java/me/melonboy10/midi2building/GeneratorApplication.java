@@ -2,13 +2,11 @@ package me.melonboy10.midi2building;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -21,9 +19,7 @@ import javafx.util.Duration;
 
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.melonboy10.midi2building.ResourceManager.BlockAtlas;
-import static me.melonboy10.midi2building.ResourceManager.imageScale;
-import static me.melonboy10.midi2building.ResourceManager.backgroundImage;
+import static me.melonboy10.midi2building.ResourceManager.*;
 
 public class GeneratorApplication extends Application {
 
@@ -87,28 +83,24 @@ public class GeneratorApplication extends Application {
         ToggleableCanvas redstoneLine = new ToggleableCanvas(BlockAtlas.REDSTONE_LINE ,false);
         ToggleableCanvas bottomTorch  = new ToggleableCanvas(BlockAtlas.BOTTOM_TORCH  ,true);
 
-        ImageView pistonArm = ResourceManager.readImageView("src/main/resources/gui/PistonHead.png");
+        TranslatableBlock pistonArm = new TranslatableBlock(readImage("src/main/resources/gui/PistonHead.png"),true, 48, 16);
 
         lever.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             lever.toggle();
+            int delay = lever.getIsOn() ? 100 : 0;
             Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(0),   actionEvent -> {lamp        .toggle();}),
                 new KeyFrame(Duration.millis(100), actionEvent -> {sideTorch   .toggle();}),
                 new KeyFrame(Duration.millis(200), actionEvent -> {dot         .toggle();}),
-                new KeyFrame(Duration.millis(300), actionEvent -> {repeater1   .toggle();}),
-                new KeyFrame(Duration.millis(400), actionEvent -> {repeater2   .toggle();}),
-                new KeyFrame(Duration.millis(500), actionEvent -> {
-                    TranslateTransition translateTransition = new TranslateTransition(Duration.millis(100), pistonArm);
-                    translateTransition.setFromX(60);
-                    translateTransition.setToX(20);
-                    translateTransition.play();
-                }),
-                new KeyFrame(Duration.millis(600), actionEvent -> {repeater_two.toggle();}),
-                new KeyFrame(Duration.millis(700), actionEvent -> {redstoneLine.toggle();}),
-                new KeyFrame(Duration.millis(800), actionEvent -> {bottomTorch .toggle();}),
-                new KeyFrame(Duration.millis(800), actionEvent -> {repeater_two.toggle();}),
-                new KeyFrame(Duration.millis(900), actionEvent -> {redstoneLine.toggle();}),
-                new KeyFrame(Duration.millis(1000),actionEvent -> {bottomTorch .toggle();})
+                new KeyFrame(Duration.millis(200), actionEvent -> {pistonArm   .toggle();}),
+                new KeyFrame(Duration.millis(200 + delay), actionEvent -> {repeater1   .toggle();}),
+                new KeyFrame(Duration.millis(300 + delay), actionEvent -> {repeater2   .toggle();}),
+                new KeyFrame(Duration.millis(400 + delay), actionEvent -> {repeater_two.toggle();}),
+                new KeyFrame(Duration.millis(500 + delay), actionEvent -> {redstoneLine.toggle();}),
+                new KeyFrame(Duration.millis(600 + delay), actionEvent -> {bottomTorch .toggle();}),
+                new KeyFrame(Duration.millis(600 + delay), actionEvent -> {repeater_two.toggle();}),
+                new KeyFrame(Duration.millis(700 + delay), actionEvent -> {redstoneLine.toggle();}),
+                new KeyFrame(Duration.millis(800 + delay),actionEvent -> {bottomTorch .toggle();})
                 );
             timeline.play();
 
@@ -116,12 +108,12 @@ public class GeneratorApplication extends Application {
 //                toggleable.toggle();
 //            }
         });
-        gridPane.add(pistonArm, 4, 8);
+        gridPane.add(pistonArm, 7, 8);
         gridPane.add(lever,11,6);
         gridPane.add(lamp,12,6);
         gridPane.add(sideTorch,10,6);
         gridPane.add(dot,10,7);
-        gridPane.add(repeater1,9,8);
+        gridPane.add(repeater1,6,8);
         gridPane.add(repeater2,5,8);
         gridPane.add(repeater_two,3,8);
         gridPane.add(bottomTorch,2,7);
@@ -131,6 +123,24 @@ public class GeneratorApplication extends Application {
             GridPane.setHalignment(toggleable, HPos.LEFT);
             GridPane.setValignment(toggleable, VPos.TOP);
         }
+        GridPane.setHalignment(pistonArm, HPos.LEFT);
+        GridPane.setValignment(pistonArm, VPos.TOP);
+
+        // static images
+        ImageView pistonBody = ResourceManager.readImageView("src/main/resources/gui/PistonBody.png");
+        pistonBody.setPreserveRatio(true);
+        pistonBody.setFitHeight(16 * scale);
+        ImageView pistonWool = ResourceManager.readImageView("src/main/resources/gui/YellowWool.png");
+        pistonWool.setPreserveRatio(true);
+        pistonWool.setFitHeight(16 * scale);
+
+        gridPane.add(pistonBody, 9, 8);
+        gridPane.add(pistonWool, 10, 8);
+
+        GridPane.setHalignment(pistonBody, HPos.LEFT);
+        GridPane.setValignment(pistonBody, VPos.TOP);
+        GridPane.setHalignment(pistonWool, HPos.LEFT);
+        GridPane.setValignment(pistonWool, VPos.TOP);
 
         stage.show();
     }
