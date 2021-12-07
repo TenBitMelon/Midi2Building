@@ -28,30 +28,28 @@ public class TranslatableBlock extends Canvas {
         );
     }
 
-    public TranslateTransition toggle(){
+    public void toggle(){
         if (isOn) {
-            return turnOff();
+            turnOff();
         } else {
-            return turnOn();
+            turnOn();
         }
     }
 
-    public TranslateTransition turnOn(){
+    public void turnOn(){
         TranslateTransition translateTransition = new TranslateTransition(Duration.millis(100), this);
         translateTransition.setFromX(16 * scale);
         translateTransition.setToX(0);
         translateTransition.play();
         isOn = true;
-        return translateTransition;
     }
 
-    public TranslateTransition turnOff (){
+    public void turnOff (){
         TranslateTransition translateTransition = new TranslateTransition(Duration.millis(100), this);
         translateTransition.setFromX(0);
         translateTransition.setToX(16 * scale);
         translateTransition.play();
         isOn = false;
-        return translateTransition;
     }
 
 }

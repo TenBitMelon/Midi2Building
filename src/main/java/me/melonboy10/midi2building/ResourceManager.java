@@ -40,13 +40,11 @@ public class ResourceManager {
         }
     }
 
-    static Canvas getSubImage(Image image, int x, int y, double width, double height) {
-        final Canvas canvas = new Canvas(width, height);
+    static void setCanvas(Canvas canvas, Image image) {
+        canvas.getGraphicsContext2D().clearRect(0,0,image.getWidth() * scale,image.getHeight() * scale);
         canvas.getGraphicsContext2D().drawImage(
-                image, x, y, width, height, 0, 0, width/imageScale * scale, height/imageScale * scale
+                image, 0, 0, image.getWidth() * imageScale, image.getHeight() * imageScale, 0, 0, image.getWidth() * scale, image.getHeight() * scale
         );
-
-        return canvas;
     }
 
     // Gets an image from the Atlas where all the images are stored. By default images are 16 x 16 Minecraft pixels where 10 pixels is one MC pixel
