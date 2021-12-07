@@ -55,6 +55,10 @@ public class ToggleableCanvas extends Canvas {
         return isOn;
     }
 
+    public void setIsOn(boolean isOn) {
+        this.isOn = isOn;
+    }
+
     public int getPixelWidth() {
         return pixelWidth;
     }

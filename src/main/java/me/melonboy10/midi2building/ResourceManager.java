@@ -13,7 +13,7 @@ import static me.melonboy10.midi2building.GeneratorApplication.scale;
 
 public class ResourceManager {
 
-    enum BlockAtlas {SIDE_TORCH(0), BOTTOM_TORCH(1), REPEATER_ONE(2), REPEATER_TWO(3), LEVER (4), REDSTONE_DOT(5), REDSTONE_LINE(6), LAMP(7);
+    enum BlockAtlas {NULL(-1),SIDE_TORCH(0), BOTTOM_TORCH(1), REPEATER_ONE(2), REPEATER_TWO(3), LEVER (4), REDSTONE_DOT(5), REDSTONE_LINE(6), LAMP(7);
         final int column;
         BlockAtlas(int column) {
             this.column = column;
