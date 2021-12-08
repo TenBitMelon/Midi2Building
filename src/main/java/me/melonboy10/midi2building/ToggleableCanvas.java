@@ -49,7 +49,6 @@ public class ToggleableCanvas extends Canvas {
         }
     }
 
-    //cache on and off textures
     public void turnOn(){
         getImageFromAtlas(this,atlas, blockAtlas,isOn);
         isOn = true;
