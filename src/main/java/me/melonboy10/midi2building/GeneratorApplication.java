@@ -37,15 +37,19 @@ public class GeneratorApplication extends Application {
         stage.setHeight(backgroundImage.getHeight() / imageScale * scale);
         stage.initStyle(StageStyle.TRANSPARENT);
 
+        // Sets the gridPane so every tile on the grid matches to one Minecraft Block
+        // (Makes the gridPane not a gridPain)
         GridPane gridPane = new GridPane();
-        //gridPane.getRowConstraints().add(new RowConstraints(backgroundImage.getHeight() / imageScale * scale / 28));
-        for (int i = 0; i < 14; i++) {
+//        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
+        for (int i = 0; i < 14; i++) { //Sets the columns to the size of the MC blocks in the image.
+                                       // THIS ONLY WORKS WITH A 14 BLOCK WIDE IMAGE
             gridPane.getColumnConstraints().add(new ColumnConstraints(backgroundImage.getWidth() / imageScale * scale / 14));
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) { //Sets the rows to the size of the MC blocks in the image.
+                                       // THIS ONLY WORKS WITH A 10 BLOCK TALL IMAGE
             gridPane.getRowConstraints().add(new RowConstraints(backgroundImage.getHeight() / imageScale * scale / 10));
         }
-        //Makes window dragable
+        // Makes window dragable
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
         AtomicReference<Double> yOffset = new AtomicReference<>((double) 0);
         gridPane.setOnMousePressed(event -> {
@@ -57,11 +61,12 @@ public class GeneratorApplication extends Application {
             stage.setY(mouseEvent.getScreenY() + yOffset.get());
         });
 
+        // Initialises the scene
         Scene scene = new Scene(gridPane);
         scene.setFill(Color.TRANSPARENT);
         stage.setScene(scene);
 
-        //Background Code
+        // Background Code
         ImageView background = new ImageView();
 
         background.setImage(backgroundImage);
@@ -69,10 +74,11 @@ public class GeneratorApplication extends Application {
         background.setFitWidth(backgroundImage.getWidth()/ imageScale * scale);
 
         gridPane.add(background,0,0);
-//        gridPane.setGridLinesVisible(true);
         GridPane.setValignment(background, VPos.TOP);
 
-        // Begin Toggle Elements
+
+        /* Toggle Elements */
+        // Initialises toggleable elements
         ToggleableCanvas lever        = new ToggleableCanvas(BlockAtlas.LEVER         ,false);
         ToggleableCanvas lamp         = new ToggleableCanvas(BlockAtlas.LAMP          ,false);
         ToggleableCanvas sideTorch    = new ToggleableCanvas(BlockAtlas.SIDE_TORCH    ,true);
@@ -85,9 +91,10 @@ public class GeneratorApplication extends Application {
 
         TranslatableBlock pistonArm = new TranslatableBlock(readImage("src/main/resources/gui/PistonHead.png"),true, 48, 16);
 
+        // Adds animations when the lever is clicked
         lever.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             lever.toggle();
-            int delay = lever.getIsOn() ? 100 : 0;
+            int delay = lever.getIsOn() ? 100 : 0; // Yes, we made the redstone turn off faster than it turns on to match the game.
             Timeline timeline = new Timeline(
                 new KeyFrame(Duration.millis(0),   actionEvent -> {lamp        .toggle();}),
                 new KeyFrame(Duration.millis(100), actionEvent -> {sideTorch   .toggle();}),
@@ -103,11 +110,9 @@ public class GeneratorApplication extends Application {
                 new KeyFrame(Duration.millis(800 + delay),actionEvent -> {bottomTorch .toggle();})
                 );
             timeline.play();
-
-//            for (ToggleableCanvas toggleable : ToggleableCanvas.toggleables) {
-//                toggleable.toggle();
-//            }
         });
+
+        // Adds the toggleables to the gridPain and therefore the scene which makes each of them visible
         gridPane.add(pistonArm, 7, 8);
         gridPane.add(lever,11,6);
         gridPane.add(lamp,12,6);
@@ -119,6 +124,7 @@ public class GeneratorApplication extends Application {
         gridPane.add(bottomTorch,2,7);
         gridPane.add(redstoneLine,2,8);
 
+        // Aligns toggleables to the top left of each square in the gridPane
         for (ToggleableCanvas toggleable : ToggleableCanvas.toggleables) {
             GridPane.setHalignment(toggleable, HPos.LEFT);
             GridPane.setValignment(toggleable, VPos.TOP);
@@ -126,7 +132,7 @@ public class GeneratorApplication extends Application {
         GridPane.setHalignment(pistonArm, HPos.LEFT);
         GridPane.setValignment(pistonArm, VPos.TOP);
 
-        // static images
+        // Adds static images to hide the piston arm when retracted
         ImageView pistonBody = ResourceManager.readImageView("src/main/resources/gui/PistonBody.png");
         pistonBody.setPreserveRatio(true);
         pistonBody.setFitHeight(16 * scale);
@@ -142,6 +148,7 @@ public class GeneratorApplication extends Application {
         GridPane.setHalignment(pistonWool, HPos.LEFT);
         GridPane.setValignment(pistonWool, VPos.TOP);
 
+        // Makes the stage visible
         stage.show();
     }
 

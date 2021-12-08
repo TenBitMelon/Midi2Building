@@ -7,6 +7,15 @@ import java.util.ArrayList;
 import static me.melonboy10.midi2building.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.ResourceManager.*;
 
+/**
+ *
+ * Toggles a canvas between two images, most commonly on or off for redstone components.
+ *
+ * @implNote The 2nd state should be the same image file as the 1st state,
+ * should be the same size, and should be immediately below the 1st state.
+ *
+ **/
+
 public class ToggleableCanvas extends Canvas {
     private int pixelWidth;
     private int pixelHeight;
@@ -51,12 +60,9 @@ public class ToggleableCanvas extends Canvas {
         isOn = false;
     }
 
+    // Getters
     public boolean getIsOn() {
         return isOn;
-    }
-
-    public void setIsOn(boolean isOn) {
-        this.isOn = isOn;
     }
 
     public int getPixelWidth() {

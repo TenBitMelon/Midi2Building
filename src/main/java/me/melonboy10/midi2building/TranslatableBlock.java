@@ -8,6 +8,15 @@ import javafx.util.Duration;
 import static me.melonboy10.midi2building.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.ResourceManager.*;
 
+/**
+ *
+ * A class for animated, moving blocks. Translates an asset back and forth horizontally
+ * by one block. Currently used for the piston.
+ * Default block is 16 x 16 Minecraft pixels.
+ *
+ * @implNote the "On" state currently moves the asset to the right. The "Off" state moves it to the left.
+ *
+ **/
 public class TranslatableBlock extends Canvas {
     private boolean isOn;
     private final int pixelWidth;
@@ -50,6 +59,19 @@ public class TranslatableBlock extends Canvas {
         translateTransition.setToX(16 * scale);
         translateTransition.play();
         isOn = false;
+    }
+
+    // Getters
+    public boolean getIsOn() {
+        return isOn;
+    }
+
+    public int getPixelWidth() {
+        return pixelWidth;
+    }
+
+    public int getPixelHeight() {
+        return pixelHeight;
     }
 
 }
