@@ -41,7 +41,7 @@ public class GeneratorApplication extends Application {
         // (Makes the gridPane not a gridPain)
         GridPane gridPane = new GridPane();
 //        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
-        for (int i = 0; i < 14; i++) { //Sets the columns to the size of the MC blocks in the image.
+        for (int i = 0; i < 14; i++) { //S  ets the columns to the size of the MC blocks in the image.
                                        // THIS ONLY WORKS WITH A 14 BLOCK WIDE IMAGE
             gridPane.getColumnConstraints().add(new ColumnConstraints(backgroundImage.getWidth() / imageScale * scale / 14));
         }
@@ -147,6 +147,21 @@ public class GeneratorApplication extends Application {
         GridPane.setValignment(pistonBody, VPos.TOP);
         GridPane.setHalignment(pistonWool, HPos.LEFT);
         GridPane.setValignment(pistonWool, VPos.TOP);
+
+
+        /* End redstone */
+        Canvas noteBlock = new Canvas(16*scale,16*scale);
+        noteBlock.setOpacity(0.25);
+        noteBlock.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            noteBlock.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        noteBlock.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            noteBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            System.out.println("clicked");
+        });
+        gridPane.add(noteBlock,3,3);
 
         // Makes the stage visible
         stage.show();
