@@ -14,6 +14,7 @@ public class ResourceManager {
 
     enum BlockAtlas {
         NULL         (-1),
+        ZERO         (0),
         SIDE_TORCH   (0),
         BOTTOM_TORCH (1),
         REPEATER_ONE (2),
@@ -29,7 +30,7 @@ public class ResourceManager {
         }
     }
     public static final int imageScale = 10;
-    public static Image backgroundImage, widgetsScaled, atlas;
+    public static Image backgroundImage, widgetsScaled, atlas, mousedLever;
 
     static {
         try {
@@ -41,6 +42,7 @@ public class ResourceManager {
 
             // Initialising and loading assets
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
+            mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
             widgetsScaled = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Widgets.png"));
         } catch (IOException ex) {
@@ -70,9 +72,9 @@ public class ResourceManager {
 
     static void getImageFromAtlas(ToggleableCanvas canvas,Image image, BlockAtlas atlas, boolean isOn) {
         if (isOn) {
-            getImageFromAtlas(canvas, image, atlas.column, 1);
-        } else {
             getImageFromAtlas(canvas, image, atlas.column, 0);
+        } else {
+            getImageFromAtlas(canvas, image, atlas.column, 1);
         }
     }
 

@@ -94,6 +94,14 @@ public class GeneratorApplication extends Application {
 
         TranslatableBlock pistonArm = new TranslatableBlock(readImage("src/main/resources/gui/PistonHead.png"),true, 48, 16);
 
+        // Makes the lever grow when moused over
+        lever.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            getImageFromAtlas(lever,mousedLever,BlockAtlas.ZERO,lever.getIsOn());
+        });
+        lever.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            getImageFromAtlas(lever,atlas,lever.getBlockAtlas(),lever.getIsOn());
+        });
+
         // Adds animations when the lever is clicked
         lever.addEventFilter(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             lever.toggle();
