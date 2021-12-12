@@ -41,8 +41,8 @@ public class ResourceManager {
 
             // Initialising and loading assets
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
-            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
-            widgetsScaled = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Widgets.png"));
+            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background - Large - NoRedstone.png"));
+
         } catch (IOException ex) {
             ex.printStackTrace();
         }
