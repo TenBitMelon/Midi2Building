@@ -16,10 +16,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.ResourceManager.*;
@@ -27,6 +29,7 @@ import static me.melonboy10.midi2building.ResourceManager.*;
 public class GeneratorApplication extends Application {
 
     public static final int scale = 4;
+    public static final Midi2BlockConversion conversion = new Midi2BlockConversion();
 
     @Override
     public void init() throws Exception {
@@ -170,7 +173,13 @@ public class GeneratorApplication extends Application {
             noteBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            System.out.println("clicked");
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                conversion.setMidiFile(selectedFile);
+            }
         });
         gridPane.add(noteBlock,3,3);
 
