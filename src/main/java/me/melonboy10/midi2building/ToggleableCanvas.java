@@ -50,13 +50,13 @@ public class ToggleableCanvas extends Canvas {
     }
 
     public void turnOn(){
-        getImageFromAtlas(this,atlas, blockAtlas,isOn);
         isOn = true;
+        getImageFromAtlas(this,atlas, blockAtlas,isOn);
     }
 
     public void turnOff(){
-        getImageFromAtlas(this,atlas, blockAtlas,isOn);
         isOn = false;
+        getImageFromAtlas(this,atlas, blockAtlas,isOn);
     }
 
     // Getters
