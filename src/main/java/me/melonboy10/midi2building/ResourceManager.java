@@ -3,10 +3,11 @@ package me.melonboy10.midi2building;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 
 import static me.melonboy10.midi2building.GeneratorApplication.scale;
 
@@ -31,6 +32,7 @@ public class ResourceManager {
     }
     public static final int imageScale = 10;
     public static Image backgroundImage, widgetsScaled, atlas, mousedLever;
+    public static Font minecraftia;
 
     static {
         try {
@@ -41,6 +43,7 @@ public class ResourceManager {
             //font = tempFont.deriveFont((float) 8 * GeneratorGUI.scale);
 
             // Initialising and loading assets
+            minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),25);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
@@ -99,5 +102,12 @@ public class ResourceManager {
     }
     static FileInputStream getResource(String path) throws FileNotFoundException {
         return new FileInputStream(path);
+    }
+    static File getMidi(){
+        FileChooser fileChooser = new FileChooser();
+        FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter("Select your midi file", "*.mid","*.midi");
+        fileChooser.getExtensionFilters().add(fileExtension);
+        File midiFile= fileChooser.showOpenDialog(new Stage());
+        return midiFile;
     }
 }
