@@ -198,7 +198,7 @@ public class GeneratorApplication extends Application {
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
                 conversion.setMidiFile(selectedFile);
-                midiText.setText("Midi: " + selectedFile.getName()
+                midiText.setText("Midi: " + selectedFile.getName());
             }
         });
         gridPane.add(noteBlock,3,3);
