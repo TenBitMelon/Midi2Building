@@ -18,6 +18,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.paint.Paint;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
@@ -27,6 +29,7 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequence;
 import java.io.File;
 import java.io.IOException;
+import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.ResourceManager.*;
@@ -34,6 +37,7 @@ import static me.melonboy10.midi2building.ResourceManager.*;
 public class GeneratorApplication extends Application {
 
     public static final int scale = 4;
+    public static final Midi2BlockConversion conversion = new Midi2BlockConversion();
 
     @Override
     public void init() throws Exception {
@@ -42,9 +46,6 @@ public class GeneratorApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        final Sequence[] sequence = {null}; //TODO Initialize this to the default sequence
-        final File[] midiFile = {null};
-
         stage.setTitle("Midi2Building Generator");
         stage.setWidth(backgroundImage.getWidth() / imageScale * scale);
         stage.setHeight(backgroundImage.getHeight() / imageScale * scale);
@@ -182,16 +183,6 @@ public class GeneratorApplication extends Application {
         gridPane.add(midiText,4,2);
         GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 2*scale)); // Moves the text to the right place
 
-        EventHandler<MouseEvent> getMidiSequence = event -> {
-            try {
-                midiFile[0] = getMidi();
-                sequence[0] = (MidiSystem.getSequence(midiFile[0]));
-                midiText.setText("Midi: " + midiFile[0].getName());
-            } catch (InvalidMidiDataException | IOException e) {
-                e.printStackTrace();
-            }
-        };
-
         Canvas noteBlock = new Canvas(16*scale,16*scale);
         noteBlock.setOpacity(0.25);
         noteBlock.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
@@ -200,7 +191,16 @@ public class GeneratorApplication extends Application {
         noteBlock.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
             noteBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
-        noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, getMidiSequence);
+        noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Resource File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                conversion.setMidiFile(selectedFile);
+                midiText.setText("Midi: " + selectedFile.getName()
+            }
+        });
         gridPane.add(noteBlock,3,3);
 
 

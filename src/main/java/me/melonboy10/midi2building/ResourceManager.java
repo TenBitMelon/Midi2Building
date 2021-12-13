@@ -46,8 +46,7 @@ public class ResourceManager {
             minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),25);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
-            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
-            widgetsScaled = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Widgets.png"));
+            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background - Large - NoRedstone.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
