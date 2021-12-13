@@ -2,24 +2,31 @@ package me.melonboy10.midi2building;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.Sequence;
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.ResourceManager.*;
@@ -35,6 +42,9 @@ public class GeneratorApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        final Sequence[] sequence = {null}; //TODO Initialize this to the default sequence
+        final File[] midiFile = {null};
+
         stage.setTitle("Midi2Building Generator");
         stage.setWidth(backgroundImage.getWidth() / imageScale * scale);
         stage.setHeight(backgroundImage.getHeight() / imageScale * scale);
@@ -124,15 +134,15 @@ public class GeneratorApplication extends Application {
         });
 
         // Adds the toggleables to the gridPain and therefore the scene which makes each of them visible
-        gridPane.add(pistonArm, 7, 8);
-        gridPane.add(lever,11,6);
-        gridPane.add(lamp,12,6);
-        gridPane.add(sideTorch,10,6);
-        gridPane.add(dot,10,7);
-        gridPane.add(repeater1,6,8);
-        gridPane.add(repeater2,5,8);
+        gridPane.add(pistonArm,   7, 8);
+        gridPane.add(lever,       11,6);
+        gridPane.add(lamp,        12,6);
+        gridPane.add(sideTorch,   10,6);
+        gridPane.add(dot,         10,7);
+        gridPane.add(repeater1,   6,8);
+        gridPane.add(repeater2,   5,8);
         gridPane.add(repeater_two,3,8);
-        gridPane.add(bottomTorch,2,7);
+        gridPane.add(bottomTorch, 2,7);
         gridPane.add(redstoneLine,2,8);
 
         // Aligns toggleables to the top left of each square in the gridPane
@@ -161,6 +171,27 @@ public class GeneratorApplication extends Application {
 
 
         /* End redstone */
+
+
+        /* Loading Files*/
+
+        Text midiText = new Text("Please Select a Midi File");
+        midiText.setFont(minecraftia);
+        midiText.setFill(Color.rgb(255, 170, 0));
+
+        gridPane.add(midiText,4,2);
+        GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 2*scale)); // Moves the text to the right place
+
+        EventHandler<MouseEvent> getMidiSequence = event -> {
+            try {
+                midiFile[0] = getMidi();
+                sequence[0] = (MidiSystem.getSequence(midiFile[0]));
+                midiText.setText("Midi: " + midiFile[0].getName());
+            } catch (InvalidMidiDataException | IOException e) {
+                e.printStackTrace();
+            }
+        };
+
         Canvas noteBlock = new Canvas(16*scale,16*scale);
         noteBlock.setOpacity(0.25);
         noteBlock.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
@@ -169,10 +200,10 @@ public class GeneratorApplication extends Application {
         noteBlock.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
             noteBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
-        noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            System.out.println("clicked");
-        });
+        noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, getMidiSequence);
         gridPane.add(noteBlock,3,3);
+
+
 
         // Makes the stage visible
         stage.show();
