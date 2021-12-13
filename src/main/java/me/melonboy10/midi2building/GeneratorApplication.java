@@ -177,7 +177,7 @@ public class GeneratorApplication extends Application {
 
         Text midiText = new Text("Please Select a Midi File");
         midiText.setFont(minecraftia);
-        midiText.setFill(Color.rgb(255, 170, 0));
+        midiText.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
 
         gridPane.add(midiText,4,2);
         GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 2*scale)); // Moves the text to the right place
