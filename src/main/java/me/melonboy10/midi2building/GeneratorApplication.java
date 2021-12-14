@@ -176,15 +176,18 @@ public class GeneratorApplication extends Application {
 
         /* Loading Files*/
 
+        // Midi Stuff
         Text midiText = new Text("Please Select a Midi File");
         midiText.setFont(minecraftia);
         midiText.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
 
         gridPane.add(midiText,4,2);
-        GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 2*scale)); // Moves the text to the right place
+        GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
 
         Canvas noteBlock = new Canvas(16*scale,16*scale);
-        noteBlock.setOpacity(0.25);
+        noteBlock.setOpacity(0.15);
+        noteBlock.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
         noteBlock.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
             noteBlock.getGraphicsContext2D().fillRect(0, 0, 100, 100);
         });
@@ -193,7 +196,7 @@ public class GeneratorApplication extends Application {
         });
         noteBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Resource File");
+            fileChooser.setTitle("Open Midi File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
@@ -203,6 +206,36 @@ public class GeneratorApplication extends Application {
         });
         gridPane.add(noteBlock,3,3);
 
+
+        // Structure Block Stuff
+        Text structureText = new Text("Please Select a Structure File");
+        structureText.setFont(minecraftia);
+        structureText.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
+
+        gridPane.add(structureText,4,3);
+        GridPane.setMargin(structureText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
+
+        Canvas structureBlock = new Canvas(16*scale,16*scale);
+        structureBlock.setOpacity(0.15);
+        structureBlock.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        structureBlock.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            structureBlock.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        structureBlock.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            structureBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        structureBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Structure File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Structure Files", "*.nbt"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                System.out.println(selectedFile);
+                structureText.setText("Structure: " + selectedFile.getName());
+            }
+        });
+        gridPane.add(structureBlock,12,3);
 
 
         // Makes the stage visible
