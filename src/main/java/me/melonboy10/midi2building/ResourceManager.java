@@ -31,22 +31,15 @@ public class ResourceManager {
         }
     }
     public static final int imageScale = 10;
-    public static Image backgroundImage, widgetsScaled, atlas, mousedLever;
+    public static Image backgroundImage, atlas, mousedLever;
     public static Font minecraftia;
 
     static {
         try {
-            //ToDo: Figure out how fonts work
-            //Font tempFont = Font.createFont(Font.TRUETYPE_FONT, getResource("gui/Minecraftia-Regular.ttf"));
-            //GraphicsEnvironment genv = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            //genv.registerFont(tempFont);
-            //font = tempFont.deriveFont((float) 8 * GeneratorGUI.scale);
-
-            // Initialising and loading assets
             minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),25);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
-            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background - Large - NoRedstone.png"));
+            backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
