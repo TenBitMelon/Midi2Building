@@ -36,7 +36,7 @@ public class ResourceManager {
 
     static {
         try {
-            minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),25);
+            minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),20);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
