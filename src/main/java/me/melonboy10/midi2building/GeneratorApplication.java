@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -175,6 +176,10 @@ public class GeneratorApplication extends Application {
 
 
         /* Loading Files*/
+        DropShadow shadow = new DropShadow();
+        shadow.setRadius(2.0);
+        shadow.setOffsetX(4.0);
+        shadow.setOffsetY(4.0);
 
         // Midi Stuff
         Text midiText = new Text("Please Select a Midi File");
@@ -183,6 +188,7 @@ public class GeneratorApplication extends Application {
 
         gridPane.add(midiText,4,2);
         GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
+        midiText.setEffect(shadow);
 
         Canvas noteBlock = new Canvas(16*scale,16*scale);
         noteBlock.setOpacity(0.15);
@@ -210,10 +216,11 @@ public class GeneratorApplication extends Application {
         // Structure Block Stuff
         Text structureText = new Text("Please Select a Structure File");
         structureText.setFont(minecraftia);
-        structureText.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
+        structureText.setFill(Color.rgb(85, 255, 85)); // Minecraft's "Light Green"
 
-        gridPane.add(structureText,4,3);
+        gridPane.add(structureText,5,3);
         GridPane.setMargin(structureText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
+        structureText.setEffect(shadow);
 
         Canvas structureBlock = new Canvas(16*scale,16*scale);
         structureBlock.setOpacity(0.15);
@@ -235,7 +242,7 @@ public class GeneratorApplication extends Application {
                 structureText.setText("Structure: " + selectedFile.getName());
             }
         });
-        gridPane.add(structureBlock,12,3);
+        gridPane.add(structureBlock,11,3);
 
 
         // Makes the stage visible
