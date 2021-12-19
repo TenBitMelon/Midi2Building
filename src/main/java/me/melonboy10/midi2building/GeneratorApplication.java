@@ -119,19 +119,18 @@ public class GeneratorApplication extends Application {
             lever.toggle();
             int delay = lever.getIsOn() ? 100 : 0; // Yes, we made the redstone turn off faster than it turns on to match the game.
             Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(0),   actionEvent -> {lamp        .toggle();}),
-                new KeyFrame(Duration.millis(100), actionEvent -> {sideTorch   .toggle();}),
-                new KeyFrame(Duration.millis(200), actionEvent -> {dot         .toggle();}),
-                new KeyFrame(Duration.millis(200), actionEvent -> {pistonArm   .toggle();}),
-                new KeyFrame(Duration.millis(200 + delay), actionEvent -> {repeater1   .toggle();}),
-                new KeyFrame(Duration.millis(300 + delay), actionEvent -> {repeater2   .toggle();}),
-                new KeyFrame(Duration.millis(400 + delay), actionEvent -> {repeater_two.toggle();}),
-                new KeyFrame(Duration.millis(500 + delay), actionEvent -> {redstoneLine.toggle();}),
-                new KeyFrame(Duration.millis(600 + delay), actionEvent -> {bottomTorch .toggle();}),
-                new KeyFrame(Duration.millis(600 + delay), actionEvent -> {repeater_two.toggle();}),
-                new KeyFrame(Duration.millis(700 + delay), actionEvent -> {redstoneLine.toggle();}),
-                new KeyFrame(Duration.millis(800 + delay),actionEvent -> {bottomTorch .toggle();})
-                );
+                new KeyFrame(Duration.millis(0),   actionEvent -> lamp        .toggle()),
+                new KeyFrame(Duration.millis(100), actionEvent -> sideTorch   .toggle()),
+                new KeyFrame(Duration.millis(200), actionEvent -> dot         .toggle()),
+                new KeyFrame(Duration.millis(200), actionEvent -> pistonArm   .toggle()),
+                new KeyFrame(Duration.millis(200 + delay), actionEvent -> repeater1   .toggle()),
+                new KeyFrame(Duration.millis(300 + delay), actionEvent -> repeater2   .toggle()),
+                new KeyFrame(Duration.millis(400 + delay), actionEvent -> repeater_two.toggle()),
+                new KeyFrame(Duration.millis(500 + delay), actionEvent -> redstoneLine.toggle()),
+                new KeyFrame(Duration.millis(600 + delay), actionEvent -> bottomTorch .toggle()),
+                new KeyFrame(Duration.millis(600 + delay), actionEvent -> repeater_two.toggle()),
+                new KeyFrame(Duration.millis(700 + delay), actionEvent -> redstoneLine.toggle()),
+                new KeyFrame(Duration.millis(800 + delay),actionEvent -> bottomTorch .toggle()));
             timeline.play();
         });
 
@@ -187,7 +186,7 @@ public class GeneratorApplication extends Application {
         midiText.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
 
         gridPane.add(midiText,4,2);
-        GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
+        GridPane.setMargin(midiText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place TODO: center this
         midiText.setEffect(shadow);
 
         Canvas noteBlock = new Canvas(16*scale,16*scale);
@@ -219,7 +218,7 @@ public class GeneratorApplication extends Application {
         structureText.setFill(Color.rgb(85, 255, 85)); // Minecraft's "Light Green"
 
         gridPane.add(structureText,5,3);
-        GridPane.setMargin(structureText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place
+        GridPane.setMargin(structureText, new Insets(0,0,-12*scale, 3*scale)); // Moves the text to the right place TODO: center this
         structureText.setEffect(shadow);
 
         Canvas structureBlock = new Canvas(16*scale,16*scale);
@@ -233,17 +232,31 @@ public class GeneratorApplication extends Application {
             structureBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         structureBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-            FileChooser fileChooser = new FileChooser();
-            fileChooser.setTitle("Open Structure File");
-            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Structure Files", "*.nbt"));
-            File selectedFile = fileChooser.showOpenDialog(stage);
-            if (selectedFile != null) {
-                System.out.println(selectedFile);
-                structureText.setText("Structure: " + selectedFile.getName());
-            }
+
         });
         gridPane.add(structureBlock,11,3);
 
+
+
+        /* Crafting table & Selecting Blocks */
+        SelectBlocks selectBlocksWindow = new SelectBlocks();
+        selectBlocksWindow.initOwner(stage);
+
+        Canvas craftingTable = new Canvas(16*scale,16*scale);
+        craftingTable.setOpacity(0.15);
+        craftingTable.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        craftingTable.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            craftingTable.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        craftingTable.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            craftingTable.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        craftingTable.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            selectBlocksWindow.show();
+        });
+
+        gridPane.add(craftingTable,12,3);
 
         // Makes the stage visible
         stage.show();
