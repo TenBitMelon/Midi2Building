@@ -7,15 +7,17 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static me.melonboy10.midi2building.GeneratorApplication.conversion;
 import static me.melonboy10.midi2building.GeneratorApplication.scale;
-import static me.melonboy10.midi2building.ResourceManager.backgroundImage;
-import static me.melonboy10.midi2building.ResourceManager.imageScale;
+import static me.melonboy10.midi2building.ResourceManager.*;
 
 public class SelectBlocks extends Stage {
 
@@ -24,7 +26,7 @@ public class SelectBlocks extends Stage {
 
         GridPane gridPane = new GridPane();
 //        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
-        for (int i = 0; i < 14; i++) { //S  ets the columns to the size of the MC blocks in the image.
+        for (int i = 0; i < 14; i++) { //Sets the columns to the size of the MC blocks in the image.
             // THIS ONLY WORKS WITH A 14 BLOCK WIDE IMAGE
             gridPane.getColumnConstraints().add(new ColumnConstraints(backgroundImage.getWidth() / imageScale * scale / 14));
         }
@@ -51,8 +53,52 @@ public class SelectBlocks extends Stage {
 
         Scene scene = new Scene(gridPane);
         scene.setFill(Color.TRANSPARENT);
-        scene.setFill(Color.CYAN);
+        scene.setFill(Color.GREY);
         this.setScene(scene);
+
+        int column = 2;
+        int row = 1;
+        int numBlocks = 0;
+        if (conversion.getIsInstantiated()) {
+            HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
+            List<String> notes = new ArrayList<>(blocks.keySet());
+            Collections.sort(notes);
+            System.out.println(notes);
+
+            for (int i = notes.size() - 1; i >= 0; i--) {
+                String note = notes.get(i);
+                String octave;
+                String noteLetter;
+                if (note.charAt(0) == '-') {
+                    octave = note.substring(0,2);
+                    noteLetter = note.substring(2);
+                } else {
+                    octave = note.substring(0,1);
+                    noteLetter = note.substring(1);
+                }
+
+                Text noteName = new Text(noteLetter + octave);
+                noteName.setFont(minecraftia);
+                noteName.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
+                gridPane.add(noteName, column, row);
+
+                Text noteNumber = new Text(String.valueOf(blocks.get(note)));
+                noteNumber.setFont(minecraftia);
+                noteNumber.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
+                gridPane.add(noteNumber, column + 2, row);
+
+                numBlocks++;
+                if (numBlocks >= 16) {
+                    break;
+                } else if (column == 2) {
+                    column = 8;
+                } else {
+                    row++;
+                    column = 2;
+                }
+
+            }
+        }
 
     }
 }

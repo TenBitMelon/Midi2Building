@@ -206,8 +206,13 @@ public class GeneratorApplication extends Application {
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
-                conversion.setMidiFile(selectedFile);
-                midiText.setText("Midi: " + selectedFile.getName());
+                try {
+                    conversion.setMidiFile(selectedFile);
+                    midiText.setText("Midi: " + selectedFile.getName());
+                } catch (InvalidMidiDataException | IOException e) {
+                    midiText.setText("Invalid Midi File");
+                    e.printStackTrace();
+                }
             }
         });
         gridPane.add(noteBlock,3,3);
@@ -233,16 +238,19 @@ public class GeneratorApplication extends Application {
             structureBlock.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         structureBlock.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open Structure File");
+            fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("NBT Files", "*.nbt"));
+            File selectedFile = fileChooser.showOpenDialog(stage);
+            if (selectedFile != null) {
+                structureText.setText("Structure: " + selectedFile.getName());
+            }
         });
         gridPane.add(structureBlock,11,3);
 
 
 
         /* Crafting table & Selecting Blocks */
-        SelectBlocks selectBlocksWindow = new SelectBlocks();
-        selectBlocksWindow.initOwner(stage);
-
         Canvas craftingTable = new Canvas(16*scale,16*scale);
         craftingTable.setOpacity(0.15);
         craftingTable.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
@@ -254,6 +262,8 @@ public class GeneratorApplication extends Application {
             craftingTable.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         craftingTable.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            SelectBlocks selectBlocksWindow = new SelectBlocks();
+            selectBlocksWindow.initOwner(stage);
             selectBlocksWindow.show();
         });
 
