@@ -200,7 +200,7 @@ public class SelectBlocks extends Stage {
 
     private void changeOctave(int octave) {
         int column = 1;
-        int row = 2;
+        int row = 6;
 
         for (Node textNode : textNodes) {
             gridPane.getChildren().remove(textNode);
@@ -209,7 +209,6 @@ public class SelectBlocks extends Stage {
         HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
         List<String> notes = new ArrayList<>(blocks.keySet());
         Collections.sort(notes);
-        System.out.println(notes);
 
         for (int i = 0; i < 12; i++) {
             String noteLetter = NOTE_NAMES.get(i % 12);
@@ -243,7 +242,7 @@ public class SelectBlocks extends Stage {
 
             if (column >= 6) {
                 column = 1;
-                row = 6;
+                row = 2;
             } else {
                 column++;
             }
