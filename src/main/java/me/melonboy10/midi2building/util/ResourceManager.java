@@ -1,4 +1,4 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.util;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
@@ -46,7 +46,7 @@ public class ResourceManager {
         }
     }
 
-    static void setCanvas(Canvas canvas, Image image) {
+    public static void setCanvas(Canvas canvas, Image image) {
         canvas.getGraphicsContext2D().clearRect(0,0,image.getWidth() * scale,image.getHeight() * scale);
         canvas.getGraphicsContext2D().drawImage(
                 image, 0, 0, image.getWidth() * imageScale, image.getHeight() * imageScale, 0, 0, image.getWidth() * scale, image.getHeight() * scale

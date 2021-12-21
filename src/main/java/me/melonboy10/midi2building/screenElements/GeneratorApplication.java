@@ -21,14 +21,14 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 import me.melonboy10.midi2building.conversion.Midi2BlockConversion;
-import me.melonboy10.midi2building.ResourceManager;
+import me.melonboy10.midi2building.util.ResourceManager;
 
 import javax.sound.midi.InvalidMidiDataException;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.melonboy10.midi2building.ResourceManager.*;
+import static me.melonboy10.midi2building.util.ResourceManager.*;
 
 public class GeneratorApplication extends Application {
 

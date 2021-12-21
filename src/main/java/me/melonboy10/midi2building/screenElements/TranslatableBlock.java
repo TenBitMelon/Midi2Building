@@ -6,7 +6,7 @@ import javafx.scene.image.Image;
 import javafx.util.Duration;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
-import static me.melonboy10.midi2building.ResourceManager.*;
+import static me.melonboy10.midi2building.util.ResourceManager.*;
 
 /**
  *
