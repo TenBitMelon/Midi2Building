@@ -1,4 +1,4 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.conversion;
 
 import javax.sound.midi.*;
 import java.io.File;

@@ -1,6 +1,7 @@
 package me.melonboy10.midi2building;
 
 import javafx.application.Application;
+import me.melonboy10.midi2building.screenElements.GeneratorApplication;
 
 import java.util.HashMap;
 

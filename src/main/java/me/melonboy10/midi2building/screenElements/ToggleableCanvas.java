@@ -1,10 +1,11 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.screenElements;
 
 import javafx.scene.canvas.Canvas;
+import me.melonboy10.midi2building.ResourceManager;
 
 import java.util.ArrayList;
 
-import static me.melonboy10.midi2building.GeneratorApplication.scale;
+import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.ResourceManager.*;
 
 /**
