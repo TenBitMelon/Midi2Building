@@ -33,11 +33,13 @@ public class ResourceManager {
     }
     public static final int imageScale = 10;
     public static Image backgroundImage, atlas, mousedLever,blockSelectionbackgroundImage;
-    public static Font minecraftia;
+    public static Font minecraftia,minecraftiaChest,minecraftiaSign;
 
     static {
         try {
-            minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),20);
+            minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),5*scale);
+            minecraftiaChest = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),6.5*scale);
+            minecraftiaSign = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),5*scale);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
