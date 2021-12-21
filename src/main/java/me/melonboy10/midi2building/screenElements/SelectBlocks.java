@@ -1,10 +1,13 @@
 package me.melonboy10.midi2building.screenElements;
 
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -39,28 +42,25 @@ public class SelectBlocks extends Stage {
         gridPane.add(background,0,0);
         GridPane.setValignment(background, VPos.TOP);
 
-        double constant = blockSelectionbackgroundImage.getWidth()/ imageScale * scale / (imageScale * scale);
-        constant = scale;
-        System.out.println(constant);
-        gridPane.getColumnConstraints().add(new ColumnConstraints(constant * 7));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(scale * 7));
         for (int i = 0; i < 9; i++) { //Sets the columns to the size of the slots in the chest image.
             // THIS ONLY WORKS WITH CHEST SLOTS
-            gridPane.getColumnConstraints().add(new ColumnConstraints( constant *  18));
+            gridPane.getColumnConstraints().add(new ColumnConstraints( scale *  18));
         }
-        gridPane.getColumnConstraints().add(new ColumnConstraints(constant * 7));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(scale * 7));
 
-        gridPane.getRowConstraints().add(new RowConstraints( constant * 7));
-        gridPane.getRowConstraints().add(new RowConstraints(constant * 10));
+        gridPane.getRowConstraints().add(new RowConstraints( scale * 7));
+        gridPane.getRowConstraints().add(new RowConstraints(scale * 10));
         for (int i = 0; i < 7; i++) { //Sets the rows to the size of the slots in the chest image.
             // THIS ONLY WORKS WITH CHEST SLOTS
-            gridPane.getRowConstraints().add(new RowConstraints( constant * 18));
+            gridPane.getRowConstraints().add(new RowConstraints( scale * 18));
         }
-        gridPane.getRowConstraints().add(new RowConstraints( constant * 7));
+        gridPane.getRowConstraints().add(new RowConstraints( scale * 7));
 
         this.initModality(Modality.WINDOW_MODAL);
         this.initStyle(StageStyle.TRANSPARENT);
 
-        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
+        //gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
 
 
         // Makes window dragable
@@ -100,6 +100,12 @@ public class SelectBlocks extends Stage {
         int row = 2;
         int numBlocks = 0;
 
+        DropShadow textShadow = new DropShadow();
+        textShadow.setRadius(0.0);
+        textShadow.setOffsetX(1.0 * scale);
+        textShadow.setOffsetY(1.0 * scale);
+        textShadow.setColor(Color.gray(0.2));
+
         if (conversion.getIsInstantiated()) {
             HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
             List<String> notes = new ArrayList<>(blocks.keySet());
@@ -118,15 +124,26 @@ public class SelectBlocks extends Stage {
                     noteLetter = note.substring(1);
                 }
 
+                // The pitch of the note Ex: C4
                 Text noteName = new Text(noteLetter + octave);
-                noteName.setFont(minecraftia);
-                noteName.setFill(Color.rgb(255, 255, 255)); // Minecraft's "Gold"
+                noteName.setFont(minecraftiaChest);
+                noteName.setFill(Color.rgb(255, 255, 255)); // Pure White
                 gridPane.add(noteName, column, row);
 
+                GridPane.setValignment(noteName,VPos.BOTTOM);
+                GridPane.setHalignment(noteName,HPos.RIGHT);
+                GridPane.setMargin(noteName, new Insets(0,0,-3*scale,0)); // Moves the text to the right place
+                noteName.setEffect(textShadow);
+
+                // The number of times the note is played
                 Text noteNumber = new Text(String.valueOf(blocks.get(note)));
-                noteNumber.setFont(minecraftia);
-                noteNumber.setFill(Color.rgb(255, 255, 255)); // Minecraft's "Gold"
+                noteNumber.setFont(minecraftiaSign);
+                noteNumber.setFill(Color.rgb(0, 0, 0)); // Pure Black
                 gridPane.add(noteNumber, column, row+2);
+
+                GridPane.setValignment(noteNumber,VPos.TOP);
+                GridPane.setHalignment(noteNumber,HPos.CENTER);
+                GridPane.setMargin(noteNumber, new Insets(3*scale,0,0,0)); // Moves the text to the right place
 
                 numBlocks++;
                 if (numBlocks >= 12) {
