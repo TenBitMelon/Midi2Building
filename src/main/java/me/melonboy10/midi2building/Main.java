@@ -10,7 +10,6 @@ public class Main {
     public static final int TEMPO = 105;
     public static final int NOTE_ON = 0x90;
     public static final int NOTE_OFF = 0x80;
-    public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
     public static final HashMap<String, String> NOTE_BLOCKS = new HashMap<>(){{
         put("C1", "minecraft:deepslate");
         put("C#1", "minecraft:stone");
