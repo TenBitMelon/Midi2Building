@@ -1,14 +1,18 @@
 package me.melonboy10.midi2building.util;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import me.melonboy10.midi2building.screenElements.ToggleableCanvas;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 
@@ -31,11 +35,33 @@ public class ResourceManager {
             this.column = column;
         }
     }
+
+    public static List<String> NOTE_NAMES = new ArrayList<String>();
     public static final int imageScale = 10;
     public static Image backgroundImage, atlas, mousedLever,blockSelectionbackgroundImage;
     public static Font minecraftia,minecraftiaChest,minecraftiaSign;
+    public static DropShadow textShadow;
 
     static {
+        NOTE_NAMES.add("C");
+        NOTE_NAMES.add("C#");
+        NOTE_NAMES.add("D");
+        NOTE_NAMES.add("D#");
+        NOTE_NAMES.add("E");
+        NOTE_NAMES.add("F");
+        NOTE_NAMES.add("F#");
+        NOTE_NAMES.add("G");
+        NOTE_NAMES.add("G#");
+        NOTE_NAMES.add("A");
+        NOTE_NAMES.add("A#");
+        NOTE_NAMES.add("B");
+
+        textShadow = new DropShadow();
+        textShadow.setRadius(0.0);
+        textShadow.setOffsetX(1.0 * scale);
+        textShadow.setOffsetY(1.0 * scale);
+        textShadow.setColor(Color.gray(0.2));
+
         try {
             minecraftia = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),5*scale);
             minecraftiaChest = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),6.5*scale);

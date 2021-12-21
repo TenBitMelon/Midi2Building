@@ -3,11 +3,9 @@ package me.melonboy10.midi2building.screenElements;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -27,9 +25,20 @@ import static me.melonboy10.midi2building.screenElements.GeneratorApplication.sc
 import static me.melonboy10.midi2building.util.ResourceManager.*;
 
 public class SelectBlocks extends Stage {
+    private int currentOctave;
+    private final List<Node> textNodes = new ArrayList<>();
+    private final GridPane gridPane;
+
+    private final Canvas upTwoOctaves;
+    private final Canvas upOneOctave;
+    private final Canvas goToC4;
+    private final Canvas downOneOctave;
+    private final Canvas downTwoOctaves;
 
     public SelectBlocks() {
         super();
+
+        currentOctave = 4;
 
         // Background Code
         ImageView background = new ImageView();
@@ -38,7 +47,7 @@ public class SelectBlocks extends Stage {
         background.setPreserveRatio(true);
         background.setFitWidth(blockSelectionbackgroundImage.getWidth()/ imageScale * scale);
 
-        GridPane gridPane = new GridPane();
+        gridPane = new GridPane();
         gridPane.add(background,0,0);
         GridPane.setValignment(background, VPos.TOP);
 
@@ -96,67 +105,174 @@ public class SelectBlocks extends Stage {
         gridPane.add(close,10,0);
 
 
+        upTwoOctaves = new Canvas(18*scale,18*scale);
+        upTwoOctaves.setOpacity(0.15);
+        upTwoOctaves.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        upTwoOctaves.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            upTwoOctaves.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        upTwoOctaves.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            upTwoOctaves.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        upTwoOctaves.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if(conversion.getIsInstantiated())
+                currentOctave += 2;
+                changeOctave(currentOctave);
+        });
+        gridPane.add(upTwoOctaves,8,3);
+
+
+        upOneOctave = new Canvas(18*scale,18*scale);
+        upOneOctave.setOpacity(0.15);
+        upOneOctave.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        upOneOctave.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            upOneOctave.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        upOneOctave.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            upOneOctave.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        upOneOctave.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if(conversion.getIsInstantiated())
+                currentOctave++;
+            changeOctave(currentOctave);
+        });
+        gridPane.add(upOneOctave,8,4);
+
+
+        goToC4 = new Canvas(18*scale,18*scale);
+        goToC4.setOpacity(0.15);
+        goToC4.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        goToC4.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            goToC4.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        goToC4.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            goToC4.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        goToC4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if(conversion.getIsInstantiated())
+                currentOctave = 4;
+            changeOctave(currentOctave);
+        });
+        gridPane.add(goToC4,8,5);
+
+
+        downOneOctave = new Canvas(18*scale,18*scale);
+        downOneOctave.setOpacity(0.15);
+        downOneOctave.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        downOneOctave.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            downOneOctave.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        downOneOctave.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            downOneOctave.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        downOneOctave.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if(conversion.getIsInstantiated())
+                currentOctave--;
+            changeOctave(currentOctave);
+        });
+        gridPane.add(downOneOctave,8,6);
+
+
+        downTwoOctaves = new Canvas(18*scale,18*scale);
+        downTwoOctaves.setOpacity(0.15);
+        downTwoOctaves.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+        downTwoOctaves.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            downTwoOctaves.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        downTwoOctaves.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            downTwoOctaves.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        downTwoOctaves.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            if(conversion.getIsInstantiated())
+                currentOctave -= 2;
+            changeOctave(currentOctave);
+        });
+        gridPane.add(downTwoOctaves,8,7);
+
+        if(conversion.getIsInstantiated())
+            changeOctave(currentOctave);
+    }
+
+    private void changeOctave(int octave) {
         int column = 1;
         int row = 2;
-        int numBlocks = 0;
 
-        DropShadow textShadow = new DropShadow();
-        textShadow.setRadius(0.0);
-        textShadow.setOffsetX(1.0 * scale);
-        textShadow.setOffsetY(1.0 * scale);
-        textShadow.setColor(Color.gray(0.2));
-
-        if (conversion.getIsInstantiated()) {
-            HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
-            List<String> notes = new ArrayList<>(blocks.keySet());
-            Collections.sort(notes);
-            System.out.println(notes);
-
-            for (int i = notes.size() - 1; i >= 0; i--) {
-                String note = notes.get(i);
-                String octave;
-                String noteLetter;
-                if (note.charAt(0) == '-') {
-                    octave = note.substring(0,2);
-                    noteLetter = note.substring(2);
-                } else {
-                    octave = note.substring(0,1);
-                    noteLetter = note.substring(1);
-                }
-
-                // The pitch of the note Ex: C4
-                Text noteName = new Text(noteLetter + octave);
-                noteName.setFont(minecraftiaChest);
-                noteName.setFill(Color.rgb(255, 255, 255)); // Pure White
-                gridPane.add(noteName, column, row);
-
-                GridPane.setValignment(noteName,VPos.BOTTOM);
-                GridPane.setHalignment(noteName,HPos.RIGHT);
-                GridPane.setMargin(noteName, new Insets(0,0,-3*scale,0)); // Moves the text to the right place
-                noteName.setEffect(textShadow);
-
-                // The number of times the note is played
-                Text noteNumber = new Text(String.valueOf(blocks.get(note)));
-                noteNumber.setFont(minecraftiaSign);
-                noteNumber.setFill(Color.rgb(0, 0, 0)); // Pure Black
-                gridPane.add(noteNumber, column, row+2);
-
-                GridPane.setValignment(noteNumber,VPos.TOP);
-                GridPane.setHalignment(noteNumber,HPos.CENTER);
-                GridPane.setMargin(noteNumber, new Insets(3*scale,0,0,0)); // Moves the text to the right place
-
-                numBlocks++;
-                if (numBlocks >= 12) {
-                    break;
-                } else if (column >= 6) {
-                    column = 1;
-                    row = 6;
-                } else {
-                    column++;
-                }
-
-            }
+        for (Node textNode : textNodes) {
+            gridPane.getChildren().remove(textNode);
         }
 
+        HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
+        List<String> notes = new ArrayList<>(blocks.keySet());
+        Collections.sort(notes);
+        System.out.println(notes);
+
+        for (int i = 0; i < 12; i++) {
+            String noteLetter = NOTE_NAMES.get(i % 12);
+
+            // The octave of the current note rather than the user-selected octave.
+            int realOctave = i / 12 + octave;
+            String note = octave + noteLetter;
+
+            // The pitch of the note Ex: C4
+            Text noteName = new Text(noteLetter + realOctave);
+            noteName.setFont(minecraftiaChest);
+            noteName.setFill(Color.rgb(255, 255, 255)); // Pure White
+            gridPane.add(noteName, column, row);
+            textNodes.add(noteName);
+
+            GridPane.setValignment(noteName,VPos.BOTTOM);
+            GridPane.setHalignment(noteName,HPos.RIGHT);
+            GridPane.setMargin(noteName, new Insets(0,0,-3*scale,0)); // Moves the text to the right place
+            noteName.setEffect(textShadow);
+
+            // The number of times the note is played
+            Text noteNumber = blocks.containsKey(note) ? new Text(String.valueOf(blocks.get(note))) : new Text("0");
+            noteNumber.setFont(minecraftiaSign);
+            noteNumber.setFill(Color.rgb(0, 0, 0)); // Pure Black
+            gridPane.add(noteNumber, column, row+2);
+            textNodes.add(noteNumber);
+
+            GridPane.setValignment(noteNumber,VPos.TOP);
+            GridPane.setHalignment(noteNumber,HPos.CENTER);
+            GridPane.setMargin(noteNumber, new Insets(3*scale,0,0,0)); // Moves the text to the right place
+
+            if (column >= 6) {
+                column = 1;
+                row = 6;
+            } else {
+                column++;
+            }
+
+        }
+
+        // Adding the change octave text
+        int realOctave = octave + 2;
+        for (int i = 1; i <= 5; i++) {
+            Text noteName = i == 3 ? new Text("C4") : new Text("C" + String.valueOf(realOctave));
+
+            noteName.setFont(minecraftiaChest);
+            noteName.setFill(Color.rgb(255, 255, 255)); // Pure White
+            gridPane.add(noteName, 8, i + 2);
+            textNodes.add(noteName);
+
+            GridPane.setValignment(noteName,VPos.BOTTOM);
+            GridPane.setHalignment(noteName,HPos.RIGHT);
+            GridPane.setMargin(noteName, new Insets(0,0,-3*scale,0)); // Moves the text to the right place
+            noteName.setEffect(textShadow);
+
+            realOctave--;
+        }
+
+        // Bringing buttons to the front so you can click them and not the text
+        upTwoOctaves.toFront();
+        upOneOctave.toFront();
+        goToC4.toFront();
+        downOneOctave.toFront();
+        downTwoOctaves.toFront();
     }
 }
