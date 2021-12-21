@@ -1,9 +1,11 @@
 package me.melonboy10.midi2building.screenElements;
 
+import javafx.geometry.VPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -26,19 +28,40 @@ public class SelectBlocks extends Stage {
     public SelectBlocks() {
         super();
 
+        // Background Code
+        ImageView background = new ImageView();
+
+        background.setImage(blockSelectionbackgroundImage);
+        background.setPreserveRatio(true);
+        background.setFitWidth(blockSelectionbackgroundImage.getWidth()/ imageScale * scale);
+
         GridPane gridPane = new GridPane();
-//        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
-        for (int i = 0; i < 14; i++) { //Sets the columns to the size of the MC blocks in the image.
-            // THIS ONLY WORKS WITH A 14 BLOCK WIDE IMAGE
-            gridPane.getColumnConstraints().add(new ColumnConstraints(backgroundImage.getWidth() / imageScale * scale / 14));
+        gridPane.add(background,0,0);
+        GridPane.setValignment(background, VPos.TOP);
+
+        double constant = blockSelectionbackgroundImage.getWidth()/ imageScale * scale / (imageScale * scale);
+        constant = scale;
+        System.out.println(constant);
+        gridPane.getColumnConstraints().add(new ColumnConstraints(constant * 7));
+        for (int i = 0; i < 9; i++) { //Sets the columns to the size of the slots in the chest image.
+            // THIS ONLY WORKS WITH CHEST SLOTS
+            gridPane.getColumnConstraints().add(new ColumnConstraints( constant *  18));
         }
-        for (int i = 0; i < 10; i++) { //Sets the rows to the size of the MC blocks in the image.
-            // THIS ONLY WORKS WITH A 10 BLOCK TALL IMAGE
-            gridPane.getRowConstraints().add(new RowConstraints(backgroundImage.getHeight() / imageScale * scale / 10));
+        gridPane.getColumnConstraints().add(new ColumnConstraints(constant * 7));
+
+        gridPane.getRowConstraints().add(new RowConstraints( constant * 7));
+        gridPane.getRowConstraints().add(new RowConstraints(constant * 10));
+        for (int i = 0; i < 7; i++) { //Sets the rows to the size of the slots in the chest image.
+            // THIS ONLY WORKS WITH CHEST SLOTS
+            gridPane.getRowConstraints().add(new RowConstraints( constant * 18));
         }
+        gridPane.getRowConstraints().add(new RowConstraints( constant * 7));
 
         this.initModality(Modality.WINDOW_MODAL);
-        this.initStyle(StageStyle.UNDECORATED);
+        this.initStyle(StageStyle.TRANSPARENT);
+
+        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
+
 
         // Makes window dragable
         AtomicReference<Double> xOffset = new AtomicReference<>((double) 0);
@@ -53,16 +76,12 @@ public class SelectBlocks extends Stage {
         });
 
 
+        // Initialises the scene
         Scene scene = new Scene(gridPane);
         scene.setFill(Color.TRANSPARENT);
-        scene.setFill(Color.GREY);
         this.setScene(scene);
 
-        int column = 2;
-        int row = 1;
-        int numBlocks = 0;
-
-        Canvas close = new Canvas(16*scale,16*scale);
+        Canvas close = new Canvas(7*scale,7*scale);
         close.getGraphicsContext2D().setFill(Color.rgb(255,0,0));
 
         close.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
@@ -74,7 +93,12 @@ public class SelectBlocks extends Stage {
         close.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.close();
         });
-        gridPane.add(close,13,0);
+        gridPane.add(close,10,0);
+
+
+        int column = 1;
+        int row = 2;
+        int numBlocks = 0;
 
         if (conversion.getIsInstantiated()) {
             HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
@@ -96,22 +120,22 @@ public class SelectBlocks extends Stage {
 
                 Text noteName = new Text(noteLetter + octave);
                 noteName.setFont(minecraftia);
-                noteName.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
+                noteName.setFill(Color.rgb(255, 255, 255)); // Minecraft's "Gold"
                 gridPane.add(noteName, column, row);
 
                 Text noteNumber = new Text(String.valueOf(blocks.get(note)));
                 noteNumber.setFont(minecraftia);
-                noteNumber.setFill(Color.rgb(255, 170, 0)); // Minecraft's "Gold"
-                gridPane.add(noteNumber, column + 2, row);
+                noteNumber.setFill(Color.rgb(255, 255, 255)); // Minecraft's "Gold"
+                gridPane.add(noteNumber, column, row+2);
 
                 numBlocks++;
-                if (numBlocks >= 16) {
+                if (numBlocks >= 12) {
                     break;
-                } else if (column == 2) {
-                    column = 8;
+                } else if (column >= 6) {
+                    column = 1;
+                    row = 6;
                 } else {
-                    row++;
-                    column = 2;
+                    column++;
                 }
 
             }

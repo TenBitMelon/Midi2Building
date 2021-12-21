@@ -32,7 +32,7 @@ public class ResourceManager {
         }
     }
     public static final int imageScale = 10;
-    public static Image backgroundImage, atlas, mousedLever;
+    public static Image backgroundImage, atlas, mousedLever,blockSelectionbackgroundImage;
     public static Font minecraftia;
 
     static {
@@ -41,6 +41,7 @@ public class ResourceManager {
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
+            blockSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/NoteSelectionBackground.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
