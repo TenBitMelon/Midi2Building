@@ -1,10 +1,8 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.screenElements;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
@@ -17,21 +15,17 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Paint;
 import javafx.stage.FileChooser;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import me.melonboy10.midi2building.conversion.Midi2BlockConversion;
+import me.melonboy10.midi2building.ResourceManager;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
 import java.io.File;
 import java.io.IOException;
-import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.ResourceManager.*;

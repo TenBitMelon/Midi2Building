@@ -1,8 +1,6 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.screenElements;
 
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -15,8 +13,8 @@ import javafx.stage.StageStyle;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static me.melonboy10.midi2building.GeneratorApplication.conversion;
-import static me.melonboy10.midi2building.GeneratorApplication.scale;
+import static me.melonboy10.midi2building.screenElements.GeneratorApplication.conversion;
+import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.ResourceManager.*;
 
 public class SelectBlocks extends Stage {

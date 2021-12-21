@@ -1,11 +1,8 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.conversion;
 
 import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequence;
 import java.io.File;
 import java.io.IOException;
-import java.util.Dictionary;
 
 public class Midi2BlockConversion {
 

@@ -6,14 +6,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import me.melonboy10.midi2building.screenElements.ToggleableCanvas;
 
 import java.io.*;
 
-import static me.melonboy10.midi2building.GeneratorApplication.scale;
+import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 
 public class ResourceManager {
 
-    enum BlockAtlas {
+    public enum BlockAtlas {
         NULL         (-1),
         ZERO         (0),
         SIDE_TORCH   (0),
@@ -57,15 +58,15 @@ public class ResourceManager {
      * Returns a Canvas sized with the app's scale factors
      * @implNote By default, images are 16 x 16 Minecraft pixels where 10 pixels is one MC pixel
      **/
-    static void getImageFromAtlas(ToggleableCanvas canvas, Image image, BlockAtlas atlas) {
+    public static void getImageFromAtlas(ToggleableCanvas canvas, Image image, BlockAtlas atlas) {
         getImageFromAtlas(canvas, image, atlas.column, 0);
     }
 
-    static void getImageFromAtlas(ToggleableCanvas canvas,Image image, BlockAtlas atlas, int row) {
+    public static void getImageFromAtlas(ToggleableCanvas canvas,Image image, BlockAtlas atlas, int row) {
         getImageFromAtlas(canvas, image, atlas.column, row);
     }
 
-    static void getImageFromAtlas(ToggleableCanvas canvas,Image image, BlockAtlas atlas, boolean isOn) {
+    public static void getImageFromAtlas(ToggleableCanvas canvas, Image image, BlockAtlas atlas, boolean isOn) {
         if (isOn) {
             getImageFromAtlas(canvas, image, atlas.column, 0);
         } else {
@@ -73,7 +74,7 @@ public class ResourceManager {
         }
     }
 
-    static void getImageFromAtlas(ToggleableCanvas canvas, Image image, int column, int row) {
+    public static void getImageFromAtlas(ToggleableCanvas canvas, Image image, int column, int row) {
         double width = canvas.getPixelWidth();
         double height = canvas.getPixelHeight();
 
@@ -86,16 +87,16 @@ public class ResourceManager {
 
     // Helper functions to load assets
     // ToDo: Add descriptors and what each function accepts and returns
-    static ImageView readImageView(String path) throws IOException {
+    public static ImageView readImageView(String path) throws IOException {
         return new ImageView(new javafx.scene.image.Image(new FileInputStream(path)));
     }
-    static Image readImage(String path) throws IOException {
+    public static Image readImage(String path) throws IOException {
         return new javafx.scene.image.Image(new FileInputStream(path));
     }
-    static FileInputStream getResource(String path) throws FileNotFoundException {
+    public static FileInputStream getResource(String path) throws FileNotFoundException {
         return new FileInputStream(path);
     }
-    static File getMidi(){
+    public static File getMidi(){
         FileChooser fileChooser = new FileChooser();
         FileChooser.ExtensionFilter fileExtension = new FileChooser.ExtensionFilter("Select your midi file", "*.mid","*.midi");
         fileChooser.getExtensionFilters().add(fileExtension);

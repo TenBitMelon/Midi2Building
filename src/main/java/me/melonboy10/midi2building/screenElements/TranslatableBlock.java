@@ -1,11 +1,11 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.screenElements;
 
 import javafx.animation.TranslateTransition;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.Image;
 import javafx.util.Duration;
 
-import static me.melonboy10.midi2building.GeneratorApplication.scale;
+import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.ResourceManager.*;
 
 /**
