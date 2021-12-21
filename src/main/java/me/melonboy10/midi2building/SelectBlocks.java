@@ -3,6 +3,8 @@ package me.melonboy10.midi2building;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -59,6 +61,21 @@ public class SelectBlocks extends Stage {
         int column = 2;
         int row = 1;
         int numBlocks = 0;
+
+        Canvas close = new Canvas(16*scale,16*scale);
+        close.getGraphicsContext2D().setFill(Color.rgb(255,0,0));
+
+        close.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            close.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            close.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            this.close();
+        });
+        gridPane.add(close,13,0);
+
         if (conversion.getIsInstantiated()) {
             HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
             List<String> notes = new ArrayList<>(blocks.keySet());
