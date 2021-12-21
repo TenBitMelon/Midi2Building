@@ -6,4 +6,10 @@ module me.melonboy10.midi2building {
 
     opens me.melonboy10.midi2building to javafx.fxml;
     exports me.melonboy10.midi2building;
+    exports me.melonboy10.midi2building.screenElements;
+    opens me.melonboy10.midi2building.screenElements to javafx.fxml;
+    exports me.melonboy10.midi2building.conversion;
+    opens me.melonboy10.midi2building.conversion to javafx.fxml;
+    exports me.melonboy10.midi2building.util;
+    opens me.melonboy10.midi2building.util to javafx.fxml;
 }

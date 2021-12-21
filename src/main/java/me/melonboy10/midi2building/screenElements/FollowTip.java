@@ -1,4 +1,4 @@
-package me.melonboy10.midi2building;
+package me.melonboy10.midi2building.screenElements;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
