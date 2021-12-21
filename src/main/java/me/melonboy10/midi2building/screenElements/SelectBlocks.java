@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.conversion;
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
-import static me.melonboy10.midi2building.ResourceManager.*;
+import static me.melonboy10.midi2building.util.ResourceManager.*;
 
 public class SelectBlocks extends Stage {
 
