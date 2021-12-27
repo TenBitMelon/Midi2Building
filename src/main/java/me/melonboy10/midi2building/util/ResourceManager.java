@@ -64,7 +64,7 @@ public class ResourceManager {
             minecraftiaChest = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),6.5*scale);
             minecraftiaSign = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),5*scale);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
-            soundAtlas = readImage("src/main/resources/gui/BlockAtlas.png");
+            soundAtlas = readImage("src/main/resources/gui/SoundAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
             blockSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/NoteSelectionBackground.png"));

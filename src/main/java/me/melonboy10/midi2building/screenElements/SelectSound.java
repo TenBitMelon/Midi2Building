@@ -126,7 +126,7 @@ public class SelectSound extends Stage {
         int column = 1;
         for (BlockSounds sound : BlockSounds.values()) {
             Canvas soundIcon = new Canvas(18*scale,18*scale);
-            getImageFromAtlas(soundIcon, atlas, sound);
+            getImageFromAtlas(soundIcon, soundAtlas, sound);
             gridPane.add(soundIcon,column,row);
 
             Canvas soundSelector = new Canvas(18*scale,18*scale);
