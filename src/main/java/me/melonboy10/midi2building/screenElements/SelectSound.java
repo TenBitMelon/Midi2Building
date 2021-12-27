@@ -122,8 +122,11 @@ public class SelectSound extends Stage {
 
 
         // Code to add the blocks
+        int rowsScrolled = 0;
+
         int row = 2;
         int column = 1;
+        Arrays.stream(BlockSounds.values()).toList().subList(rowsScrolled*9,BlockSounds.values().length - 1);
         for (BlockSounds sound : BlockSounds.values()) {
             Canvas soundIcon = new Canvas(18*scale,18*scale);
             getImageFromAtlas(soundIcon, soundAtlas, sound);
