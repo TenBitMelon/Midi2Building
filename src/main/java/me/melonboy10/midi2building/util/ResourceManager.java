@@ -30,32 +30,29 @@ public class ResourceManager {
         REDSTONE_LINE(6),
         LAMP         (7);
 
-        final int column;
+        public final int column;
         BlockAtlas(int column) {
             this.column = column;
         }
     }
 
-    public static List<String> NOTE_NAMES = new ArrayList<String>();
+    public enum BlockSounds {
+        NULL         (0),
+        STONE        (1);
+
+        public final int soundID;
+        BlockSounds(int soundID) {
+            this.soundID = soundID;
+        }
+    }
+
+    public static List<String> NOTE_NAMES = new ArrayList<>(){{add("C"); add("C#"); add("D"); add("D#"); add("E"); add("F"); add("F#"); add("G"); add("G#"); add("A"); add("A#"); add("B");}};
     public static final int imageScale = 10;
-    public static Image backgroundImage, atlas, mousedLever,blockSelectionbackgroundImage;
+    public static Image backgroundImage, atlas, mousedLever, blockSelectionbackgroundImage, soundSelectionbackgroundImage, soundAtlas;
     public static Font minecraftia,minecraftiaChest,minecraftiaSign;
     public static DropShadow textShadow;
 
     static {
-        NOTE_NAMES.add("C");
-        NOTE_NAMES.add("C#");
-        NOTE_NAMES.add("D");
-        NOTE_NAMES.add("D#");
-        NOTE_NAMES.add("E");
-        NOTE_NAMES.add("F");
-        NOTE_NAMES.add("F#");
-        NOTE_NAMES.add("G");
-        NOTE_NAMES.add("G#");
-        NOTE_NAMES.add("A");
-        NOTE_NAMES.add("A#");
-        NOTE_NAMES.add("B");
-
         textShadow = new DropShadow();
         textShadow.setRadius(0.0);
         textShadow.setOffsetX(1.0 * scale);
@@ -67,9 +64,11 @@ public class ResourceManager {
             minecraftiaChest = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),6.5*scale);
             minecraftiaSign = Font.loadFont(getResource("src/main/resources/gui/Minecraftia-Regular.ttf"),5*scale);
             atlas = readImage("src/main/resources/gui/BlockAtlas.png");
+            soundAtlas = readImage("src/main/resources/gui/BlockAtlas.png");
             mousedLever = readImage("src/main/resources/gui/MousedLever.png");
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
             blockSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/NoteSelectionBackground.png"));
+            soundSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/BlockSelectionBackground.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
