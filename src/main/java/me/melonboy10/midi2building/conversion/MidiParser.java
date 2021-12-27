@@ -1,5 +1,7 @@
 package me.melonboy10.midi2building.conversion;
 
+import me.melonboy10.midi2building.util.ResourceManager;
+
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,8 @@ public class MidiParser {
 
     private File midiFile;
     private Sequence sequence;
-    private HashMap<String, Integer> blocks = new HashMap<>();
+    private final HashMap<String, Integer> blockNumber = new HashMap<>();
+    private final HashMap<String, ResourceManager.BlockSounds> blockSound = new HashMap<>();
 
     public MidiParser(File midiFile) throws InvalidMidiDataException, IOException {
         this.midiFile = midiFile;
@@ -32,10 +35,11 @@ public class MidiParser {
                         int note = key % 12;
                         String noteName = octave + NOTE_NAMES[note];
 
-                        if (blocks.containsKey(noteName)) {
-                            blocks.put(noteName,blocks.get(noteName) + 1);
+                        if (blockNumber.containsKey(noteName)) {
+                            blockNumber.put(noteName,blockNumber.get(noteName) + 1);
                         } else {
-                            blocks.put(noteName,1);
+                            blockNumber.put(noteName,1);
+                            blockSound.put(noteName, ResourceManager.BlockSounds.NULL);
                         }
                     }
                 }
@@ -43,7 +47,10 @@ public class MidiParser {
         }
     }
 
-    public HashMap<String, Integer> getBlocks() {
-        return blocks;
+    public HashMap<String, Integer> getBlockNumber() {
+        return blockNumber;
+    }
+    public HashMap<String, ResourceManager.BlockSounds> getBlockSound() {
+        return blockSound;
     }
 }

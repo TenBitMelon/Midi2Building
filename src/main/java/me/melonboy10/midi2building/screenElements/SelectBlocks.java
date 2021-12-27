@@ -6,6 +6,7 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.ColumnConstraints;
@@ -90,7 +91,9 @@ public class SelectBlocks extends Stage {
         scene.setFill(Color.TRANSPARENT);
         this.setScene(scene);
 
-        Canvas close = new Canvas(7*scale,7*scale);
+        // Add close button
+        Canvas close = new Canvas(18*scale,18*scale);
+        close.setOpacity(0.15);
         close.getGraphicsContext2D().setFill(Color.rgb(255,0,0));
 
         close.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
@@ -102,9 +105,10 @@ public class SelectBlocks extends Stage {
         close.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
             this.close();
         });
-        gridPane.add(close,10,0);
+        gridPane.add(close,8,8);
 
 
+        // Add change octave buttons
         upTwoOctaves = new Canvas(18*scale,18*scale);
         upTwoOctaves.setOpacity(0.15);
         upTwoOctaves.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
@@ -116,8 +120,8 @@ public class SelectBlocks extends Stage {
             upTwoOctaves.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         upTwoOctaves.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            currentOctave += 2;
             if(conversion.getIsInstantiated())
-                currentOctave += 2;
                 changeOctave(currentOctave);
         });
         gridPane.add(upTwoOctaves,8,3);
@@ -134,9 +138,9 @@ public class SelectBlocks extends Stage {
             upOneOctave.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         upOneOctave.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            currentOctave++;
             if(conversion.getIsInstantiated())
-                currentOctave++;
-            changeOctave(currentOctave);
+                changeOctave(currentOctave);
         });
         gridPane.add(upOneOctave,8,4);
 
@@ -152,9 +156,9 @@ public class SelectBlocks extends Stage {
             goToC4.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         goToC4.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            currentOctave = 4;
             if(conversion.getIsInstantiated())
-                currentOctave = 4;
-            changeOctave(currentOctave);
+                changeOctave(currentOctave);
         });
         gridPane.add(goToC4,8,5);
 
@@ -170,9 +174,9 @@ public class SelectBlocks extends Stage {
             downOneOctave.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         downOneOctave.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            currentOctave--;
             if(conversion.getIsInstantiated())
-                currentOctave--;
-            changeOctave(currentOctave);
+                changeOctave(currentOctave);
         });
         gridPane.add(downOneOctave,8,6);
 
@@ -188,9 +192,9 @@ public class SelectBlocks extends Stage {
             downTwoOctaves.getGraphicsContext2D().clearRect(0, 0, 100, 100);
         });
         downTwoOctaves.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            currentOctave -= 2;
             if(conversion.getIsInstantiated())
-                currentOctave -= 2;
-            changeOctave(currentOctave);
+                changeOctave(currentOctave);
         });
         gridPane.add(downTwoOctaves,8,7);
 
@@ -205,10 +209,6 @@ public class SelectBlocks extends Stage {
         for (Node textNode : textNodes) {
             gridPane.getChildren().remove(textNode);
         }
-
-        HashMap<String,Integer> blocks = conversion.getMidiFile().getBlocks();
-        List<String> notes = new ArrayList<>(blocks.keySet());
-        Collections.sort(notes);
 
         for (int i = 0; i < 12; i++) {
             String noteLetter = NOTE_NAMES.get(i % 12);
@@ -229,8 +229,31 @@ public class SelectBlocks extends Stage {
             GridPane.setMargin(noteName, new Insets(0,0,-3*scale,0)); // Moves the text to the right place
             noteName.setEffect(textShadow);
 
+            // The Block sound associated with the pitch
+            Canvas soundIcon = new Canvas(18*scale,18*scale);
+            getImageFromAtlas(soundIcon, atlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, BlockSounds.NULL));
+            gridPane.add(soundIcon,column,row + 1);
+
+            // The button to change the block sound - opens SelectSound.java
+            Canvas changeSound = new Canvas(18*scale,18*scale);
+            changeSound.setOpacity(0.15);
+            changeSound.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
+
+            changeSound.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+                changeSound.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+            });
+            changeSound.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+                changeSound.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+            });
+            changeSound.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                SelectSound selectSoundWindow = new SelectSound(note, soundIcon);
+                selectSoundWindow.initOwner(this);
+                selectSoundWindow.show();
+            });
+            gridPane.add(changeSound,column,row+1);
+
             // The number of times the note is played
-            Text noteNumber = blocks.containsKey(note) ? new Text(String.valueOf(blocks.get(note))) : new Text("0");
+            Text noteNumber = conversion.getMidiFile().getBlockNumber().containsKey(note) ? new Text(String.valueOf(conversion.getMidiFile().getBlockNumber().get(note))) : new Text("0");
             noteNumber.setFont(minecraftiaSign);
             noteNumber.setFill(Color.rgb(0, 0, 0)); // Pure Black
             gridPane.add(noteNumber, column, row+2);
@@ -239,6 +262,7 @@ public class SelectBlocks extends Stage {
             GridPane.setValignment(noteNumber,VPos.TOP);
             GridPane.setHalignment(noteNumber,HPos.CENTER);
             GridPane.setMargin(noteNumber, new Insets(3*scale,0,0,0)); // Moves the text to the right place
+
 
             if (column >= 6) {
                 column = 1;
@@ -267,11 +291,25 @@ public class SelectBlocks extends Stage {
             realOctave--;
         }
 
-        // Bringing buttons to the front so you can click them and not the text
+        // Bringing buttons to the front so they can be clicked
         upTwoOctaves.toFront();
         upOneOctave.toFront();
         goToC4.toFront();
         downOneOctave.toFront();
         downTwoOctaves.toFront();
+
+    }
+
+    private static void getImageFromAtlas(Canvas canvas, Image image, BlockSounds sound) {
+        double width = 18.0;
+        double height = 18.0;
+
+        int row = sound.soundID / 9;
+        int column = sound.soundID % 9;
+
+        canvas.getGraphicsContext2D().clearRect(0,0,width * scale,height * scale);
+        canvas.getGraphicsContext2D().drawImage(
+                image, width * imageScale * column, height * imageScale * row, width * imageScale, height * imageScale, 0, 0, width * scale, height * scale
+        );
     }
 }
