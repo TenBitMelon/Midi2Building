@@ -231,7 +231,7 @@ public class SelectBlocks extends Stage {
 
             // The Block sound associated with the pitch
             Canvas soundIcon = new Canvas(18*scale,18*scale);
-            getImageFromAtlas(soundIcon, atlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, BlockSounds.NULL));
+            getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, BlockSounds.NULL));
             gridPane.add(soundIcon,column,row + 1);
 
             // The button to change the block sound - opens SelectSound.java
