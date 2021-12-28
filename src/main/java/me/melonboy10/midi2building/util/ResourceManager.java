@@ -36,16 +36,6 @@ public class ResourceManager {
         }
     }
 
-    public enum BlockSounds {
-        NULL         (0),
-        STONE        (1);
-
-        public final int soundID;
-        BlockSounds(int soundID) {
-            this.soundID = soundID;
-        }
-    }
-
     public static List<String> NOTE_NAMES = new ArrayList<>(){{add("C"); add("C#"); add("D"); add("D#"); add("E"); add("F"); add("F#"); add("G"); add("G#"); add("A"); add("A#"); add("B");}};
     public static final int imageScale = 10;
     public static Image backgroundImage, atlas, mousedLever, blockSelectionbackgroundImage, soundSelectionbackgroundImage, soundAtlas;
