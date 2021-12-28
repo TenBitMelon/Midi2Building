@@ -17,6 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import me.melonboy10.midi2building.util.SoundAtlas;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
@@ -231,7 +232,7 @@ public class SelectBlocks extends Stage {
 
             // The Block sound associated with the pitch
             Canvas soundIcon = new Canvas(18*scale,18*scale);
-            getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, BlockSounds.NULL));
+            getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, SoundAtlas.NULL));
             gridPane.add(soundIcon,column,row + 1);
 
             // The button to change the block sound - opens SelectSound.java
@@ -300,12 +301,12 @@ public class SelectBlocks extends Stage {
 
     }
 
-    private static void getImageFromAtlas(Canvas canvas, Image image, BlockSounds sound) {
+    private static void getImageFromAtlas(Canvas canvas, Image image, SoundAtlas sound) {
         double width = 18.0;
         double height = 18.0;
 
-        int row = sound.soundID / 9;
-        int column = sound.soundID % 9;
+        int row = sound.textureID / 9;
+        int column = sound.textureID % 9;
 
         canvas.getGraphicsContext2D().clearRect(0,0,width * scale,height * scale);
         canvas.getGraphicsContext2D().drawImage(
