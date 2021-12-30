@@ -52,6 +52,7 @@ public class SelectBlocks extends Stage {
         gridPane = new GridPane();
         gridPane.add(background,0,0);
         GridPane.setValignment(background, VPos.TOP);
+        gridPane.setStyle("-fx-background-color: null;"); // Makes it transparent
 
         gridPane.getColumnConstraints().add(new ColumnConstraints(scale * 7));
         for (int i = 0; i < 9; i++) { //Sets the columns to the size of the slots in the chest image.
@@ -234,6 +235,7 @@ public class SelectBlocks extends Stage {
             Canvas soundIcon = new Canvas(18*scale,18*scale);
             getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, SoundAtlas.NULL));
             gridPane.add(soundIcon,column,row + 1);
+            textNodes.add(soundIcon);
 
             // The button to change the block sound - opens SelectSound.java
             Canvas changeSound = new Canvas(18*scale,18*scale);
@@ -302,15 +304,19 @@ public class SelectBlocks extends Stage {
     }
 
     private static void getImageFromAtlas(Canvas canvas, Image image, SoundAtlas sound) {
-        double width = 18.0;
-        double height = 18.0;
+        double width = 15.0;
+        double height = 15.0;
 
-        int row = sound.textureID / 9;
-        int column = sound.textureID % 9;
+        double leftOffset = 1.5;
+        double topOffset = 1.5;
 
-        canvas.getGraphicsContext2D().clearRect(0,0,width * scale,height * scale);
+//        int row = sound.textureID / 9;
+        int row = 0;
+        int column = sound.textureID;//% 9;
+
+        canvas.getGraphicsContext2D().clearRect(0,0,width * imageScale * scale,height * imageScale * scale);
         canvas.getGraphicsContext2D().drawImage(
-                image, width * imageScale * column, height * imageScale * row, width * imageScale, height * imageScale, 0, 0, width * scale, height * scale
+                image, width * imageScale * column, height * imageScale * row, width * imageScale, height * imageScale, leftOffset * scale, topOffset * scale, width * scale, height * scale
         );
     }
 }
