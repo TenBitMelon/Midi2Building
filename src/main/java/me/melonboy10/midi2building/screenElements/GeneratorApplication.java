@@ -50,6 +50,7 @@ public class GeneratorApplication extends Application {
         // Sets the gridPane so every tile on the grid matches to one Minecraft Block
         // (Makes the gridPane not a gridPain)
         GridPane gridPane = new GridPane();
+        gridPane.setStyle("-fx-background-color: null;"); // Makes it transparent
 //        gridPane.setGridLinesVisible(true);  // [DEBUG] makes the gridPane visible
         for (int i = 0; i < 14; i++) { //S  ets the columns to the size of the MC blocks in the image.
                                        // THIS ONLY WORKS WITH A 14 BLOCK WIDE IMAGE

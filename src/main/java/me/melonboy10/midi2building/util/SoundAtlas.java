@@ -3,6 +3,8 @@ package me.melonboy10.midi2building.util;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public enum SoundAtlas {
 
     NULL(0),
@@ -102,4 +104,6 @@ public enum SoundAtlas {
         this.textureID = textureID;
         this.blocks = new ArrayList<>(List.of(block));
     }
+
+    public static final int numSounds = 56;
 }

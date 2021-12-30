@@ -1,9 +1,14 @@
 package me.melonboy10.midi2building.screenElements;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,19 +23,24 @@ import javafx.stage.StageStyle;
 import me.melonboy10.midi2building.util.ResourceManager;
 import me.melonboy10.midi2building.util.SoundAtlas;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.conversion;
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.util.ResourceManager.*;
+import static me.melonboy10.midi2building.util.SoundAtlas.numSounds;
 
 public class SelectSound extends Stage {
     private static final int IMAGES_PER_ROW = 8;
 
     private final GridPane gridPane;
     private final String note;
+    private final List<Node> soundNodes = new ArrayList<>();
     Canvas iconToChange;
+
 
     public SelectSound(String note, Canvas iconToChange) {
         super();
@@ -47,6 +57,7 @@ public class SelectSound extends Stage {
 
         gridPane = new GridPane();
         gridPane.add(background,0,0);
+        gridPane.setStyle("-fx-background-color: null;"); // Makes it transparent
         GridPane.setValignment(background, VPos.TOP);
 
         gridPane.getColumnConstraints().add(new ColumnConstraints(scale * 8));
@@ -122,57 +133,91 @@ public class SelectSound extends Stage {
         });
         gridPane.add(close,12,0);
 
+        ScrollBar sc = new ScrollBar();
+        sc.setMin(0);
+        sc.setMax(numSounds/9 - 4);
+        sc.setValue(0);
+        sc.setOrientation(Orientation.VERTICAL);
 
+        sc.setUnitIncrement(1.0);
+
+
+        gridPane.add(sc,11,2);
+
+        sc.valueProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> ov,
+                                Number old_val, Number new_val) {
+                setScroll(new_val.intValue());
+
+            }
+        });
+
+        setScroll(0);
+    }
+
+    private void setScroll(int rowsScrolled) {
         // Code to add the blocks
-        int rowsScrolled = 0;
 
+        System.out.println(rowsScrolled);
         int row = 2;
         int column = 1;
-        Arrays.stream(SoundAtlas.values()).toList().subList(rowsScrolled * 9, SoundAtlas.values().length - 1);
-        for (SoundAtlas sound : SoundAtlas.values()) {
-            Canvas soundIcon = new Canvas(18*scale,18*scale);
-            getImageFromAtlas(soundIcon, soundAtlas, sound);
-            gridPane.add(soundIcon,column,row);
 
-            Canvas soundSelector = new Canvas(18*scale,18*scale);
-            soundSelector.setOpacity(0.15);
-            soundSelector.getGraphicsContext2D().setFill(Color.rgb(255,255,255));
-
-            soundSelector.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-                soundSelector.getGraphicsContext2D().fillRect(0, 0, 100, 100);
-            });
-            soundSelector.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
-                soundSelector.getGraphicsContext2D().clearRect(0, 0, 100, 100);
-            });
-            soundSelector.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                conversion.getMidiFile().getBlockSound().put(note,sound);
-                getImageFromAtlas(iconToChange, soundAtlas, sound);
-                this.close();
-            });
-            gridPane.add(soundSelector,column,row);
-
-            column++;
-            if (column > 9){
-                column = 1;
-                row++;
-                if (row > 5)
-                    break;
-            }
-
+        for (Node node : soundNodes) {
+            gridPane.getChildren().remove(node);
         }
 
+        for (SoundAtlas sound : SoundAtlas.values()) {
+
+            if (sound.textureID >= rowsScrolled * 9) {
+
+                Canvas soundIcon = new Canvas(18 * scale, 18 * scale);
+                getImageFromAtlas(soundIcon, soundAtlas, sound);
+                gridPane.add(soundIcon, column, row);
+                soundNodes.add(soundIcon);
+
+                Canvas soundSelector = new Canvas(18 * scale, 18 * scale);
+                soundSelector.setOpacity(0.15);
+                soundSelector.getGraphicsContext2D().setFill(Color.rgb(255, 255, 255));
+
+                soundSelector.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+                    soundSelector.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+                });
+                soundSelector.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+                    soundSelector.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+                });
+                soundSelector.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+                    conversion.getMidiFile().getBlockSound().put(note, sound);
+                    getImageFromAtlas(iconToChange, soundAtlas, sound);
+                    this.close();
+                });
+                gridPane.add(soundSelector, column, row);
+                soundNodes.add(soundSelector);
+
+                column++;
+                if (column > 9) {
+                    column = 1;
+                    row++;
+                    if (row > 6)
+                        break;
+                }
+            }
+        }
     }
 
     private static void getImageFromAtlas(Canvas canvas, Image image, SoundAtlas sound) {
-        double width = 18.0;
-        double height = 18.0;
+        double width = 15.0;
+        double height = 15.0;
 
-        int row = sound.textureID / 9;
-        int column = sound.textureID % 9;
+        double leftOffset = 1.5;
+        double topOffset = 1.5;
 
-        canvas.getGraphicsContext2D().clearRect(0,0,width * scale,height * scale);
+//        int row = sound.textureID / 9;
+        int row = 0;
+        int column = sound.textureID;//% 9;
+
+        canvas.getGraphicsContext2D().clearRect(0,0,width * imageScale * scale,height * imageScale * scale);
         canvas.getGraphicsContext2D().drawImage(
-                image, width * imageScale * column, height * imageScale * row, width * imageScale, height * imageScale, 0, 0, width * scale, height * scale
+                image, width * imageScale * column, height * imageScale * row, width * imageScale, height * imageScale, leftOffset * scale, topOffset * scale, width * scale, height * scale
         );
     }
 
