@@ -38,7 +38,7 @@ public class ResourceManager {
 
     public static List<String> NOTE_NAMES = new ArrayList<>(){{add("C"); add("C#"); add("D"); add("D#"); add("E"); add("F"); add("F#"); add("G"); add("G#"); add("A"); add("A#"); add("B");}};
     public static final int imageScale = 10;
-    public static Image backgroundImage, atlas, mousedLever, blockSelectionbackgroundImage, soundSelectionbackgroundImage, soundAtlas;
+    public static Image backgroundImage, atlas, mousedLever, blockSelectionbackgroundImage, soundSelectionbackgroundImage, soundAtlas, scrollBar;
     public static Font minecraftia,minecraftiaChest,minecraftiaSign;
     public static DropShadow textShadow;
 
@@ -59,6 +59,7 @@ public class ResourceManager {
             backgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/Background-NoRedstone.png"));
             blockSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/NoteSelectionBackground.png"));
             soundSelectionbackgroundImage = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/BlockSelectionBackground.png"));
+            scrollBar = new javafx.scene.image.Image(new FileInputStream("src/main/resources/gui/ScrollBar.png"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }

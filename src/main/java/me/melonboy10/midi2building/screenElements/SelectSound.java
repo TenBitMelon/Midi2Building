@@ -2,6 +2,7 @@ package me.melonboy10.midi2building.screenElements;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.VPos;
@@ -39,6 +40,8 @@ public class SelectSound extends Stage {
     private final GridPane gridPane;
     private final String note;
     private final List<Node> soundNodes = new ArrayList<>();
+    private ScrollBar sc;
+    private int rowsScrolled = 0;
     Canvas iconToChange;
 
 
@@ -133,21 +136,39 @@ public class SelectSound extends Stage {
         });
         gridPane.add(close,12,0);
 
-        ScrollBar sc = new ScrollBar();
+        int isOn = 0; // When this is 0, it gets the on version of the slider
+        Canvas slider = new Canvas(12*scale, 15*scale);
+        slider.getGraphicsContext2D().clearRect(0,0,12 * scale,15 * scale);
+        slider.getGraphicsContext2D().drawImage(
+                scrollBar, 12 * isOn * imageScale, 0, 12 * imageScale, 15 * imageScale, 0, 0, 12 * scale, 15 * scale
+        );
+        GridPane.setMargin(slider, new Insets(-0.5 * scale,0, 0, scale));
+
+        gridPane.add(slider,11,2);
+
+        int numRows = (int)(numSounds / 9) - 4;
+        sc = new ScrollBar();
         sc.setMin(0);
-        sc.setMax(numSounds/9 - 4);
+        sc.setMax(numRows);
         sc.setValue(0);
         sc.setOrientation(Orientation.VERTICAL);
+        sc.setMinHeight(90 * scale);
+        sc.setMinWidth(180 * scale);
+        sc.setStyle("-fx-background-color: null;"); // Makes it transparent
+
+        sc.setOpacity(0.0);// Makes it invisible
 
         sc.setUnitIncrement(1.0);
 
-
-        gridPane.add(sc,11,2);
+        gridPane.add(sc,1,1);
+        GridPane.setHalignment(sc, HPos.LEFT);
+        GridPane.setValignment(sc, VPos.TOP);
 
         sc.valueProperty().addListener(new ChangeListener<Number>() {
             public void changed(ObservableValue<? extends Number> ov,
                                 Number old_val, Number new_val) {
                 setScroll(new_val.intValue());
+                GridPane.setMargin(slider, new Insets((73 * new_val.doubleValue() / (numRows - 1) - 0.5) * scale,0, 0, scale));
 
             }
         });
@@ -158,7 +179,6 @@ public class SelectSound extends Stage {
     private void setScroll(int rowsScrolled) {
         // Code to add the blocks
 
-        System.out.println(rowsScrolled);
         int row = 2;
         int column = 1;
 
