@@ -154,13 +154,25 @@ public class SelectSound extends Stage {
         sc.setOrientation(Orientation.VERTICAL);
         sc.setMinHeight(90 * scale);
         sc.setMinWidth(180 * scale);
-        sc.setStyle("-fx-background-color: null;"); // Makes it transparent
+        sc.setVisibleAmount(0.5);
+        sc.setStyle(
+            """       
+                .decrement-arrow {
+                    -fx-padding:0;
+                 }
+                .increment-arrow {
+                    -fx-padding:0;
+                }
+            """ // No idea why this works but this shrinks the increment arrows on the scroll bar
+        );
+        //sc.setStyle("-fx-font-size: 20px;"); // changes the size of the thumb on the scroll bar (No idea why it doesn't work)
+        sc.applyCss(); // I don't think this is necessary but idk
 
         sc.setOpacity(0.0);// Makes it invisible
 
         sc.setUnitIncrement(1.0);
 
-        gridPane.add(sc,1,1);
+        gridPane.add(sc,1,2);
         GridPane.setHalignment(sc, HPos.LEFT);
         GridPane.setValignment(sc, VPos.TOP);
 
