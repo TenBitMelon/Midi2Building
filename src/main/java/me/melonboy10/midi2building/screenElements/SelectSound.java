@@ -25,6 +25,8 @@ import javafx.stage.StageStyle;
 import me.melonboy10.midi2building.util.SoundAtlas;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -199,9 +201,17 @@ public class SelectSound extends Stage {
             gridPane.getChildren().remove(node);
         }
 
-        for (SoundAtlas sound : SoundAtlas.values()) {
+        SoundAtlas[] rawSoundAtlas = SoundAtlas.values();
+        ArrayList<SoundAtlas> unsortedSoundAtlas = new ArrayList<>(Arrays.asList(rawSoundAtlas));
+        ArrayList<SoundAtlas> sortedSoundAtlas = new ArrayList<>(Arrays.asList(rawSoundAtlas));
 
-            if (sound.textureID >= rowsScrolled * 9) {
+        for (SoundAtlas sound : unsortedSoundAtlas) {
+            sortedSoundAtlas.set(sound.textureID,sound);
+        }
+
+        for (SoundAtlas sound : sortedSoundAtlas) {
+
+            if (sound.textureID >= rowsScrolled * 9 ) {
 
                 Canvas soundIcon = new Canvas(18 * scale, 18 * scale);
                 getImageFromAtlas(soundIcon, soundAtlas, sound);
