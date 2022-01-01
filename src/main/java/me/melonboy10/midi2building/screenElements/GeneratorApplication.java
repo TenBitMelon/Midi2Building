@@ -218,7 +218,7 @@ public class GeneratorApplication extends Application {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Midi File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
-            fileChooser.setInitialDirectory(new File(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsoluteFile().getParentFile().getParentFile() + "/src/main/resources/defaultSongs"));
+            //fileChooser.setInitialDirectory(new File(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsoluteFile().getParentFile().getParentFile() + "/src/main/resources/defaultSongs"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
                 try {
