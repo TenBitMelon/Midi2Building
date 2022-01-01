@@ -1,12 +1,11 @@
 package me.melonboy10.midi2building.conversion;
 
-import me.melonboy10.midi2building.util.ResourceManager;
 import me.melonboy10.midi2building.util.SoundAtlas;
 
 import javax.sound.midi.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MidiParser {
@@ -16,8 +15,9 @@ public class MidiParser {
 
     private File midiFile;
     private Sequence sequence;
-    private final HashMap<String, Integer> blockNumber = new HashMap<>();
-    private final HashMap<String, SoundAtlas> blockSound = new HashMap<>();
+    private final HashMap<String, Integer> noteCount = new HashMap<>();
+    private final HashMap<String, SoundAtlas> noteToSoundType = new HashMap<>();
+    private final ArrayList<Long> notes = new ArrayList<>();
 
     public MidiParser(File midiFile) throws InvalidMidiDataException, IOException {
         this.midiFile = midiFile;
@@ -26,21 +26,21 @@ public class MidiParser {
         for (Track track :  sequence.getTracks()) {
             for (int i = 0; i < track.size(); i++) {
                 MidiEvent event = track.get(i);
-//                System.out.print("@" + event.getTick() + " ");
                 MidiMessage message = event.getMessage();
                 if (message instanceof ShortMessage sm) {
 //                    System.out.print("Channel: " + sm.getChannel() + " ");
                     if (sm.getCommand() == NOTE_ON) {
+                        notes.add(event.getTick());
                         int key = sm.getData1();
                         int octave = (key / 12)-1;
                         int note = key % 12;
                         String noteName = octave + NOTE_NAMES[note];
 
-                        if (blockNumber.containsKey(noteName)) {
-                            blockNumber.put(noteName,blockNumber.get(noteName) + 1);
+                        if (noteCount.containsKey(noteName)) {
+                            noteCount.put(noteName, noteCount.get(noteName) + 1);
                         } else {
-                            blockNumber.put(noteName,1);
-                            blockSound.put(noteName, SoundAtlas.NULL);
+                            noteCount.put(noteName,1);
+                            noteToSoundType.put(noteName, SoundAtlas.NULL);
                         }
                     }
                 }
@@ -48,10 +48,10 @@ public class MidiParser {
         }
     }
 
-    public HashMap<String, Integer> getBlockNumber() {
-        return blockNumber;
+    public HashMap<String, Integer> getNoteCount() {
+        return noteCount;
     }
-    public HashMap<String, SoundAtlas> getBlockSound() {
-        return blockSound;
+    public HashMap<String, SoundAtlas> getNoteToSoundType() {
+        return noteToSoundType;
     }
 }

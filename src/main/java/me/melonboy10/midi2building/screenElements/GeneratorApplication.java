@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.effect.DropShadow;
@@ -20,6 +21,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import me.melonboy10.midi2building.Main;
 import me.melonboy10.midi2building.conversion.Midi2BlockConversion;
 import me.melonboy10.midi2building.util.ResourceManager;
 
@@ -87,6 +89,21 @@ public class GeneratorApplication extends Application {
         gridPane.add(background,0,0);
         GridPane.setValignment(background, VPos.TOP);
 
+        Canvas close = new Canvas(18*scale,18*scale);
+        close.setOpacity(0.15);
+        close.getGraphicsContext2D().setFill(Color.rgb(255,0,0));
+
+        close.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            close.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            close.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            stage.close();
+        });
+        gridPane.add(close,13,1);
+
 
         /* Toggle Elements */
         // Initialises toggleable elements
@@ -104,10 +121,12 @@ public class GeneratorApplication extends Application {
 
         // Makes the lever grow when moused over
         lever.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
-            getImageFromAtlas(lever,mousedLever,BlockAtlas.ZERO,lever.getIsOn());
+//            getImageFromAtlas(lever,mousedLever,BlockAtlas.ZERO,lever.getIsOn());
+            scene.setCursor(Cursor.HAND);
         });
         lever.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
             getImageFromAtlas(lever,atlas,lever.getBlockAtlas(),lever.getIsOn());
+            scene.setCursor(Cursor.DEFAULT);
         });
 
         // Adds animations when the lever is clicked
@@ -115,18 +134,18 @@ public class GeneratorApplication extends Application {
             lever.toggle();
             int delay = lever.getIsOn() ? 100 : 0; // Yes, we made the redstone turn off faster than it turns on to match the game.
             Timeline timeline = new Timeline(
-                new KeyFrame(Duration.millis(0),   actionEvent -> lamp        .toggle()),
-                new KeyFrame(Duration.millis(100), actionEvent -> sideTorch   .toggle()),
-                new KeyFrame(Duration.millis(200), actionEvent -> dot         .toggle()),
-                new KeyFrame(Duration.millis(200), actionEvent -> pistonArm   .toggle()),
-                new KeyFrame(Duration.millis(200 + delay), actionEvent -> repeater1   .toggle()),
-                new KeyFrame(Duration.millis(300 + delay), actionEvent -> repeater2   .toggle()),
+                new KeyFrame(Duration.millis(0),   actionEvent -> lamp.toggle()),
+                new KeyFrame(Duration.millis(100), actionEvent -> sideTorch.toggle()),
+                new KeyFrame(Duration.millis(200), actionEvent -> dot.toggle()),
+                new KeyFrame(Duration.millis(200), actionEvent -> pistonArm.toggle()),
+                new KeyFrame(Duration.millis(200 + delay), actionEvent -> repeater1.toggle()),
+                new KeyFrame(Duration.millis(300 + delay), actionEvent -> repeater2.toggle()),
                 new KeyFrame(Duration.millis(400 + delay), actionEvent -> repeater_two.toggle()),
                 new KeyFrame(Duration.millis(500 + delay), actionEvent -> redstoneLine.toggle()),
-                new KeyFrame(Duration.millis(600 + delay), actionEvent -> bottomTorch .toggle()),
+                new KeyFrame(Duration.millis(600 + delay), actionEvent -> bottomTorch.toggle()),
                 new KeyFrame(Duration.millis(600 + delay), actionEvent -> repeater_two.toggle()),
                 new KeyFrame(Duration.millis(700 + delay), actionEvent -> redstoneLine.toggle()),
-                new KeyFrame(Duration.millis(800 + delay),actionEvent -> bottomTorch .toggle()));
+                new KeyFrame(Duration.millis(800 + delay),actionEvent -> bottomTorch.toggle()));
             timeline.play();
         });
 
@@ -199,6 +218,7 @@ public class GeneratorApplication extends Application {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Open Midi File");
             fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Midi Files", "*.mid", "*.midi"));
+            fileChooser.setInitialDirectory(new File(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsoluteFile().getParentFile().getParentFile() + "/src/main/resources/defaultSongs"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
                 try {
