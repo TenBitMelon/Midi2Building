@@ -13,6 +13,7 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -219,6 +220,11 @@ public class SelectSound extends Stage {
                     getImageFromAtlas(iconToChange, soundAtlas, sound);
                     this.close();
                 });
+
+                soundSelector.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
+                    System.out.println(scrollEvent.getDeltaY());
+                });
+
                 gridPane.add(soundSelector, column, row);
                 soundNodes.add(soundSelector);
 
