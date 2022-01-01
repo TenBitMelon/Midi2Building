@@ -10,7 +10,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import me.melonboy10.midi2building.screenElements.ToggleableCanvas;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +22,6 @@ import static me.melonboy10.midi2building.screenElements.GeneratorApplication.sc
 public class ResourceManager {
 
     public enum BlockAtlas {
-        NULL         (-1),
-        ZERO         (0),
         SIDE_TORCH   (0),
         BOTTOM_TORCH (1),
         REPEATER_ONE (2),
@@ -28,7 +29,8 @@ public class ResourceManager {
         LEVER        (4),
         REDSTONE_DOT (5),
         REDSTONE_LINE(6),
-        LAMP         (7);
+        LAMP         (7),
+        NOTE_BLOCK   (8);
 
         public final int column;
         BlockAtlas(int column) {

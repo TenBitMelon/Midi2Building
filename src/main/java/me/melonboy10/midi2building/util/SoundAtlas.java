@@ -104,6 +104,4 @@ public enum SoundAtlas {
         this.textureID = textureID;
         this.blocks = new ArrayList<>(List.of(block));
     }
-
-    public static final int numSounds = SoundAtlas.values().length;
 }
