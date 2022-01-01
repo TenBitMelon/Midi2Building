@@ -89,6 +89,21 @@ public class GeneratorApplication extends Application {
         gridPane.add(background,0,0);
         GridPane.setValignment(background, VPos.TOP);
 
+        Canvas close = new Canvas(18*scale,18*scale);
+        close.setOpacity(0.15);
+        close.getGraphicsContext2D().setFill(Color.rgb(255,0,0));
+
+        close.addEventHandler(MouseEvent.MOUSE_ENTERED, mouseEvent -> {
+            close.getGraphicsContext2D().fillRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_EXITED, mouseEvent -> {
+            close.getGraphicsContext2D().clearRect(0, 0, 100, 100);
+        });
+        close.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
+            stage.close();
+        });
+        gridPane.add(close,13,1);
+
 
         /* Toggle Elements */
         // Initialises toggleable elements
