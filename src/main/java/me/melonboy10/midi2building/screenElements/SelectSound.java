@@ -13,6 +13,7 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
@@ -21,18 +22,15 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import me.melonboy10.midi2building.util.ResourceManager;
 import me.melonboy10.midi2building.util.SoundAtlas;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.conversion;
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.scale;
 import static me.melonboy10.midi2building.util.ResourceManager.*;
-import static me.melonboy10.midi2building.util.SoundAtlas.numSounds;
 
 public class SelectSound extends Stage {
     private static final int IMAGES_PER_ROW = 8;
@@ -146,7 +144,7 @@ public class SelectSound extends Stage {
 
         gridPane.add(slider,11,2);
 
-        int numRows = (int)(numSounds / 9) - 4;
+        int numRows = (int)(SoundAtlas.values().length / 9) - 4;
         sc = new ScrollBar();
         sc.setMin(0);
         sc.setMax(numRows);
@@ -218,10 +216,15 @@ public class SelectSound extends Stage {
                     soundSelector.getGraphicsContext2D().clearRect(0, 0, 100, 100);
                 });
                 soundSelector.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> {
-                    conversion.getMidiFile().getBlockSound().put(note, sound);
+                    conversion.getMidiFile().getNoteToSoundType().put(note, sound);
                     getImageFromAtlas(iconToChange, soundAtlas, sound);
                     this.close();
                 });
+
+                soundSelector.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
+                    System.out.println(scrollEvent.getDeltaY());
+                });
+
                 gridPane.add(soundSelector, column, row);
                 soundNodes.add(soundSelector);
 

@@ -19,7 +19,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import me.melonboy10.midi2building.util.SoundAtlas;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static me.melonboy10.midi2building.screenElements.GeneratorApplication.conversion;
@@ -233,7 +234,7 @@ public class SelectBlocks extends Stage {
 
             // The Block sound associated with the pitch
             Canvas soundIcon = new Canvas(18*scale,18*scale);
-            getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getBlockSound().getOrDefault(note, SoundAtlas.NULL));
+            getImageFromAtlas(soundIcon, soundAtlas, conversion.getMidiFile().getNoteToSoundType().getOrDefault(note, SoundAtlas.NULL));
             gridPane.add(soundIcon,column,row + 1);
             textNodes.add(soundIcon);
 
@@ -256,7 +257,7 @@ public class SelectBlocks extends Stage {
             gridPane.add(changeSound,column,row+1);
 
             // The number of times the note is played
-            Text noteNumber = conversion.getMidiFile().getBlockNumber().containsKey(note) ? new Text(String.valueOf(conversion.getMidiFile().getBlockNumber().get(note))) : new Text("0");
+            Text noteNumber = conversion.getMidiFile().getNoteCount().containsKey(note) ? new Text(String.valueOf(conversion.getMidiFile().getNoteCount().get(note))) : new Text("0");
             noteNumber.setFont(minecraftiaSign);
             noteNumber.setFill(Color.rgb(0, 0, 0)); // Pure Black
             gridPane.add(noteNumber, column, row+2);
