@@ -40,7 +40,9 @@ public class SelectSound extends Stage {
     private final List<Node> soundNodes = new ArrayList<>();
     private ScrollBar sc;
     private int rowsScrolled = 0;
+    private final int numRows = (int)(SoundAtlas.values().length / 9) - 4;
     Canvas iconToChange;
+    private final Canvas slider;
 
 
     public SelectSound(String note, Canvas iconToChange) {
@@ -135,7 +137,7 @@ public class SelectSound extends Stage {
         gridPane.add(close,12,0);
 
         int isOn = 0; // When this is 0, it gets the on version of the slider
-        Canvas slider = new Canvas(12*scale, 15*scale);
+        slider = new Canvas(12*scale, 15*scale);
         slider.getGraphicsContext2D().clearRect(0,0,12 * scale,15 * scale);
         slider.getGraphicsContext2D().drawImage(
                 scrollBar, 12 * isOn * imageScale, 0, 12 * imageScale, 15 * imageScale, 0, 0, 12 * scale, 15 * scale
@@ -144,7 +146,6 @@ public class SelectSound extends Stage {
 
         gridPane.add(slider,11,2);
 
-        int numRows = (int)(SoundAtlas.values().length / 9) - 4;
         sc = new ScrollBar();
         sc.setMin(0);
         sc.setMax(numRows);
@@ -188,6 +189,8 @@ public class SelectSound extends Stage {
 
     private void setScroll(int rowsScrolled) {
         // Code to add the blocks
+        GridPane.setMargin(slider, new Insets((73 * (double) rowsScrolled / (numRows - 1) - 0.5) * scale,0, 0, scale));
+        this.rowsScrolled = rowsScrolled;
 
         int row = 2;
         int column = 1;
@@ -222,7 +225,9 @@ public class SelectSound extends Stage {
                 });
 
                 soundSelector.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
-                    System.out.println(scrollEvent.getDeltaY());
+                    int newRow = rowsScrolled - (int) (scrollEvent.getDeltaY() / 40);
+                    if (newRow >= 0 && newRow <= numRows)
+                        setScroll(newRow);
                 });
 
                 gridPane.add(soundSelector, column, row);
