@@ -105,5 +105,5 @@ public enum SoundAtlas {
         this.blocks = new ArrayList<>(List.of(block));
     }
 
-    public static final int numSounds = 56;
+    public static final int numSounds = SoundAtlas.values().length;
 }
