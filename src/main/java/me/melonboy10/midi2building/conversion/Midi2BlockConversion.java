@@ -9,11 +9,7 @@ public class Midi2BlockConversion {
     private boolean isInstantiated = false;
     private MidiParser midiFile;
 
-    public Midi2BlockConversion() {
-
-    }
-
-    public void setMidiFile(File selectedFile) throws InvalidMidiDataException, IOException {
+    public Midi2BlockConversion(File selectedFile) {
         midiFile = new MidiParser(selectedFile);
         isInstantiated = true;
     }

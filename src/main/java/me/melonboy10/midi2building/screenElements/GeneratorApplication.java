@@ -35,7 +35,7 @@ import static me.melonboy10.midi2building.util.ResourceManager.*;
 public class GeneratorApplication extends Application {
 
     public static final int scale = 4;
-    public static final Midi2BlockConversion conversion = new Midi2BlockConversion();
+    public static Midi2BlockConversion conversion;
 
     @Override
     public void init() throws Exception {
@@ -221,13 +221,8 @@ public class GeneratorApplication extends Application {
             //fileChooser.setInitialDirectory(new File(new File(Main.class.getProtectionDomain().getCodeSource().getLocation().getFile()).getAbsoluteFile().getParentFile().getParentFile() + "/src/main/resources/defaultSongs"));
             File selectedFile = fileChooser.showOpenDialog(stage);
             if (selectedFile != null) {
-                try {
-                    conversion.setMidiFile(selectedFile);
-                    midiText.setText("Midi: " + selectedFile.getName());
-                } catch (InvalidMidiDataException | IOException e) {
-                    midiText.setText("Invalid Midi File");
-                    e.printStackTrace();
-                }
+                conversion = new Midi2BlockConversion(selectedFile);
+                midiText.setText("Midi: " + selectedFile.getName());
             }
         });
         gridPane.add(noteBlock,3,3);

@@ -19,9 +19,13 @@ public class MidiParser {
     private final HashMap<String, SoundAtlas> noteToSoundType = new HashMap<>();
     private final ArrayList<Long> notes = new ArrayList<>();
 
-    public MidiParser(File midiFile) throws InvalidMidiDataException, IOException {
+    public MidiParser(File midiFile) {
         this.midiFile = midiFile;
-        sequence = MidiSystem.getSequence(this.midiFile);
+        try {
+            sequence = MidiSystem.getSequence(this.midiFile);
+        } catch (Exception e) {
+            System.out.println("Failed to read midi file!");
+        }
 
         for (Track track :  sequence.getTracks()) {
             for (int i = 0; i < track.size(); i++) {
