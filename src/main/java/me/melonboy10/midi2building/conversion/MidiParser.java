@@ -54,4 +54,5 @@ public class MidiParser {
     public HashMap<String, SoundAtlas> getNoteToSoundType() {
         return noteToSoundType;
     }
+    public ArrayList<Long> getNotes() { return notes; }
 }
