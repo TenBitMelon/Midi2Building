@@ -88,14 +88,31 @@ public class Schematic {
     }
 
     class Location {
-        int x;
-        int y;
-        int z;
+
+        public static final int xOffset = 0;
+        public static final int yOffset = 1;
+        public static final int zOffset = 0;
+
+        private int x;
+        private int y;
+        private int z;
 
         public Location(int x, int y, int z) {
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        public int getX() {
+            return x + xOffset;
+        }
+
+        public int getY() {
+            return y + yOffset;
+        }
+
+        public int getZ() {
+            return z + zOffset;
         }
 
         @Override
