@@ -11,6 +11,7 @@ public class DataPack {
     private final String folderName = "Midi2Building";
     private final String namespace = "midi2building";
     private final HashMap<Long, Schematic.Block> blocks = new HashMap<>();
+    public long largestTime = 0;
     private double timeScale = 0.1;
 
     public DataPack(String datapackOutput) {
@@ -34,10 +35,6 @@ public class DataPack {
 
 
         File functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions");
-        for (File file : functionFolder.listFiles()) {
-            file.delete();
-        }
-        functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
         for (File file : functionFolder.listFiles()) {
             file.delete();
         }
@@ -70,7 +67,7 @@ public class DataPack {
 
         blocks.forEach((time, block) -> {
             try {
-                String name = makeFunctionFile((long) (time * timeScale), block);
+                String name = makeFunctionFile((long) (time * timeScale), block, time);
                 startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (long) (time * timeScale) + "t\n");
                 endWriter.write("schedule clear " + namespace + ":placements/" + name + "\n");
             } catch (IOException e) {
@@ -82,11 +79,12 @@ public class DataPack {
         endWriter.close();
     }
 
-    public String makeFunctionFile(long tick, Schematic.Block block) throws IOException {
+    public String makeFunctionFile(long tick, Schematic.Block block, long time) throws IOException {
         File file = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements/" + tick + "-" + block.hashCode() + ".mcfunction");
         file.createNewFile();
         FileWriter writer = new FileWriter(file);
-        writer.write(String.format("setblock %s %s %s %s", block.location.x, block.location.y, block.location.z, block.getFormat()));
+        writer.write(String.format("setblock %s %s %s %s", block.location.getX(), block.location.getY(), block.location.getZ(), block.getFormat()) + "\n");
+        writer.write("title @a actionbar [\"\",{\"text\":\"|-=\"},{\"text\":\"" + "\u2b1b".repeat((int) (time / (double) largestTime * 10)) + "\",\"color\":\"aqua\"},{\"text\":\"" + "\u2b1b".repeat((int) (10 - time / (double) largestTime * 10)) + "\",\"color\":\"gray\"},{\"text\":\"=-| \"}]");
         writer.close();
         return tick + "-" + block.hashCode();
     }

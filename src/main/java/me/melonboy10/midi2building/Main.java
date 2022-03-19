@@ -1,13 +1,6 @@
 package me.melonboy10.midi2building;
 
-import net.querz.nbt.io.NBTUtil;
-import net.querz.nbt.io.NamedTag;
-import net.querz.nbt.tag.CompoundTag;
-import net.querz.nbt.tag.ListTag;
-import net.querz.nbt.tag.StringTag;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,30 +10,30 @@ public class Main {
 
     static String datapackOutput;
     static File song = new File("src/main/resources/defaultSongs/Thumbnail.mid");
-    static File nbt = new File("src/main/resources/sound_lattice.nbt"); // new File("src/main/resources/thumbnail.nbt");
+    static File nbt = new File("src/main/resources/tiny_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
     static HashMap<String, SoundAtlas> noteToSound = new HashMap<>(){{
-        put("1C",   null); //
-        put("1C#",  null); //
-        put("1D",   null); //
-        put("1D#",  null); //
-        put("1E",   null); //
-        put("1F#",  null); //
+        put("1C",   SoundAtlas.DEEPSLATE); //
+        put("1C#",  SoundAtlas.STONE); //
+        put("1D",   SoundAtlas.MOSS_BLOCK); //
+        put("1D#",  SoundAtlas.GRASS); //
+        put("1E",   SoundAtlas.WOOD); //
+        put("1F#",  SoundAtlas.WOOL); //
         put("1G#",  null); //
-        put("1A",   null); //
-        put("1B",   null); //
-        put("2C",   SoundAtlas.HONEY); // 38
-        put("2C#",  SoundAtlas.CANDLE); // 33
-        put("2D",   SoundAtlas.AMETHYST_BLOCK); //
-        put("2D#",  SoundAtlas.GRASS); // 20
-        put("2E",   SoundAtlas.ANVIL); // 240
-        put("2F#",  SoundAtlas.WART_BLOCK); // 50
-        put("2G#",  SoundAtlas.BONE); // 34
-        put("2A",   SoundAtlas.NETHERITE); // 44
-        put("2B",   SoundAtlas.METAL); // 12
-        put("3C",   SoundAtlas.WOOD); // 28
-        put("3C#",  SoundAtlas.WOOL); // 140
-        put("3D",   SoundAtlas.SAND); // 9
-        put("3D#",  SoundAtlas.TUFF); // 10
+        put("1A",   SoundAtlas.COPPER); //
+        put("1B",   SoundAtlas.CHAIN); //
+        put("2C",   SoundAtlas.DEEPSLATE); //
+        put("2C#",  SoundAtlas.STONE); //
+        put("2D",   SoundAtlas.MOSS_BLOCK); //
+        put("2D#",  SoundAtlas.GRASS); //
+        put("2E",   SoundAtlas.WOOD); //
+        put("2F#",  SoundAtlas.WOOL); //
+        put("2G#",  null); //
+        put("2A",   SoundAtlas.COPPER); //
+        put("2B",   SoundAtlas.CHAIN); //
+        put("3C",   null); //
+        put("3C#",  null); //
+        put("3D",   null); //
+        put("3D#",  null); //
         put("3E",   null); //
         put("3F#",  null); //
         put("3G#",  null); //
@@ -64,16 +57,23 @@ public class Main {
         schematic.copyBlocks();
         DataPack dataPack = new DataPack(datapackOutput);
 
+        long largestTime = 0;
         for (Note note : parser.getNotes()) {
             SoundAtlas key = noteToSound.get(note.getNote());
             if (key != null) {
-                Schematic.Block block = schematic.getAndRemoveBlock(null);
-                if (block != null) dataPack.addBlock(note.getTime(), block);
+                Schematic.Block block = schematic.getAndRemoveBlock(key);
+                if (block != null) {
+                    dataPack.addBlock(note.getTime(), block);
+                    largestTime = Math.max(largestTime, note.getTime());
+                } else {
+                    System.out.println("!!! Block not found in schematic with sound " + key + " !!!");
+                }
             } else {
                 System.out.println("!!! Found note without block matching !!! " + note.getNote());
             }
         }
 
+        dataPack.largestTime = largestTime;
         dataPack.generate();
     }
 }
