@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Main {
 
     static String datapackOutput;
-    static File song = new File("src/main/resources/defaultSongs/Thumbnail.mid");
+    static File song = new File("src/main/resources/defaultSongs/ThumbnailFull.mid");
     public static File nbt = new File("src/main/resources/tiny_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
     static HashMap<String, NoteEvent> noteToSound = new HashMap<>(){{
         put("1C",   new PlaceBlock(SoundAtlas.DEEPSLATE)); //
