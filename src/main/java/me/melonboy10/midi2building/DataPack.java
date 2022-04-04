@@ -3,6 +3,7 @@ package me.melonboy10.midi2building;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class DataPack {
@@ -33,12 +34,11 @@ public class DataPack {
             e.printStackTrace();
         }
 
-
-        File functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions");
-        for (File file : functionFolder.listFiles()) {
-            file.delete();
-        }
         File folderGen = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
+        folderGen.mkdirs();
+        File functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
+        Arrays.stream(functionFolder.listFiles()).iterator().forEachRemaining(File::delete);
+        folderGen = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
         folderGen.mkdirs();
 
         // ----- MC META -----
@@ -80,7 +80,7 @@ public class DataPack {
     }
 
     public String makeFunctionFile(long tick, Schematic.Block block, long time) throws IOException {
-        File file = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements/" + tick + "-" + block.hashCode() + ".mcfunction");
+        File file = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements/" + tick + "-" + block.name + ".mcfunction");
         file.createNewFile();
         FileWriter writer = new FileWriter(file);
         writer.write(String.format("setblock %s %s %s %s", block.location.getX(), block.location.getY(), block.location.getZ(), block.getFormat()) + "\n");
