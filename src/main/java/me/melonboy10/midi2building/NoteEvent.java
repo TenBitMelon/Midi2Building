@@ -4,7 +4,11 @@ import java.io.IOException;
 
 public interface NoteEvent {
 
-    public void makeFunctionFile(String path, long tick, long time) throws IOException;
+    boolean makeFunctionFile(String path, long tick, long time) throws IOException;
 
-    public String getFileName();
+    NoteEvent copy();
+
+    String getFileName();
+
+    long getTick();
 }

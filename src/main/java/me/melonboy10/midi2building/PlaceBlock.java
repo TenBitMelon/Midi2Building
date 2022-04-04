@@ -16,15 +16,17 @@ public class PlaceBlock implements NoteEvent {
 
     private SoundAtlas block;
     private String fileName = null;
+    private long tick = -1;
 
     public PlaceBlock(SoundAtlas block) {
         this.block = block;
     }
 
-    public void makeFunctionFile(String path, long tick, long time) throws IOException {
-
+    public boolean makeFunctionFile(String path, long tick, long time) throws IOException {
         Schematic.Block SchemBlock = schematic.getAndRemoveBlock(block);
         if (SchemBlock != null) {
+            this.tick = tick;
+
             File file = new File(path + tick + "-" + SchemBlock.hashCode() + ".mcfunction");
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
@@ -32,20 +34,33 @@ public class PlaceBlock implements NoteEvent {
             //writer.write("title @a actionbar [\"\",{\"text\":\"|-=\"},{\"text\":\"" + "\u2b1b".repeat((int) (time / (double) largestTime * 10)) + "\",\"color\":\"aqua\"},{\"text\":\"" + "\u2b1b".repeat((int) (10 - time / (double) largestTime * 10)) + "\",\"color\":\"gray\"},{\"text\":\"=-| \"}]");
             writer.close();
             fileName = tick + "-" + SchemBlock.hashCode();
+
+            /*
             if(SchemBlock.location.getY() == 2 && SchemBlock.location.getX() == 4 && SchemBlock.location.getZ() == 1) {
                 System.out.println(fileName);
                 System.out.println(SchemBlock);
             }
             if(block.name().equals("AIR")){
                 System.out.println(SchemBlock.location.getX() + ", " + SchemBlock.location.getY() + ", " + SchemBlock.location.getZ());
-            }
+            }*/
+            return true;
         } else {
             //System.out.println("!!! Block not found in schematic with block " + block.name() + " !!!");
         }
+        return false;
+    }
+
+    public PlaceBlock copy(){
+        return(new PlaceBlock(block));
     }
 
     @Override
     public String getFileName() {
         return fileName;
     }
+
+    public long getTick() {
+        return tick;
+    }
+
 }
