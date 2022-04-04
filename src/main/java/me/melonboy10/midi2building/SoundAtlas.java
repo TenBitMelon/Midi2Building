@@ -597,7 +597,6 @@ public enum SoundAtlas {
   SOUL_SOIL(73, "SOUL_SOIL"),
   STONE(
       74,
-      "AIR",
       "STONE",
       "GRANITE",
       "POLISHED_GRANITE",
@@ -834,8 +833,6 @@ public enum SoundAtlas {
       "DEAD_HORN_CORAL_WALL_FAN",
       "CONDUIT",
       "POTTED_BAMBOO",
-      "VOID_AIR",
-      "CAVE_AIR",
       "BUBBLE_COLUMN",
       "POLISHED_GRANITE_STAIRS",
       "SMOOTH_RED_SANDSTONE_STAIRS",

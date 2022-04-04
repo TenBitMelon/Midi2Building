@@ -10,7 +10,7 @@ public class Main {
 
     static String datapackOutput;
     static File song = new File("src/main/resources/defaultSongs/Thumbnail.mid");
-    static File nbt = new File("src/main/resources/tiny_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
+    static File nbt = new File("src/main/resources/palette_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
     static HashMap<String, SoundAtlas> noteToSound = new HashMap<>(){{
         put("1C",   SoundAtlas.DEEPSLATE); //
         put("1C#",  SoundAtlas.STONE); //
@@ -52,28 +52,35 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         MidiParser parser = new MidiParser(song);
-        System.out.println(parser.getNoteCount());
         Schematic schematic = new Schematic(nbt);
         schematic.copyBlocks();
         DataPack dataPack = new DataPack(datapackOutput);
+
+        HashMap<SoundAtlas, Integer> soundCount = new HashMap<>();
 
         long largestTime = 0;
         for (Note note : parser.getNotes()) {
             SoundAtlas key = noteToSound.get(note.getNote());
             if (key != null) {
+                if (soundCount.containsKey(key)) {
+                    soundCount.put(key, soundCount.get(key) + 1);
+                } else {
+                    soundCount.put(key, 1);
+                }
                 Schematic.Block block = schematic.getAndRemoveBlock(key);
                 if (block != null) {
                     dataPack.addBlock(note.getTime(), block);
                     largestTime = Math.max(largestTime, note.getTime());
                 } else {
-                    System.out.println("!!! Block not found in schematic with sound " + key + " !!!");
+//                    System.out.println("!!! Block not found in schematic with sound " + key + " !!!");
                 }
             } else {
-                System.out.println("!!! Found note without block matching !!! " + note.getNote());
+//                System.out.println("!!! Found note without block matching !!! " + note.getNote());
             }
         }
 
         dataPack.largestTime = largestTime;
         dataPack.generate();
+        System.out.println(soundCount);
     }
 }
