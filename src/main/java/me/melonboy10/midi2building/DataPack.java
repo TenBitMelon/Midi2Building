@@ -3,7 +3,6 @@ package me.melonboy10.midi2building;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class DataPack {
@@ -11,34 +10,40 @@ public class DataPack {
     private final String output;
     private final String folderName = "Midi2Building";
     private final String namespace = "midi2building";
-    private final HashMap<Long, Schematic.Block> blocks = new HashMap<>();
+    private final HashMap<Long, String> events = new HashMap<>();
     public long largestTime = 0;
+    public Schematic.Location size;
     private double timeScale = 0.1;
 
     public DataPack(String datapackOutput) {
         this.output = datapackOutput;
     }
 
-    public void addBlock(long time, Schematic.Block block) {
-        blocks.put(time, block);
+    public void addEvent(Long time, String fileName){
+        events.put(time, fileName);
     }
 
     public void setTimeScale(double timeScale) {
         this.timeScale = timeScale;
     }
 
+    public String getPath(){
+        return output + "/" + folderName + "/data/" + namespace;
+    }
+
     public void generate() throws IOException {
-        if (blocks.isEmpty()) try {
+        if (events.isEmpty()) try {
             throw new Exception("No blocks found in schematic");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+
+        File functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions");
+        for (File file : functionFolder.listFiles()) {
+            file.delete();
+        }
         File folderGen = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
-        folderGen.mkdirs();
-        File functionFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
-        Arrays.stream(functionFolder.listFiles()).iterator().forEachRemaining(File::delete);
-        folderGen = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
         folderGen.mkdirs();
 
         // ----- MC META -----
@@ -47,15 +52,22 @@ public class DataPack {
         packMeta.createNewFile();
         FileWriter fileWriter = new FileWriter(packMeta);
         fileWriter.write(
-            """
-                {
-                    "pack": {
-                        "pack_format": 9,
-                        "description": "Midi2Building Generator - Made by melonboy10 & Minecraft_Atom"
-                    }
-                }"""
+                """
+                    {
+                        "pack": {
+                            "pack_format": 9,
+                            "description": "Midi2Building Generator - Made by melonboy10 & Minecraft_Atom"
+                        }
+                    }"""
         );
         fileWriter.close();
+
+        File clearFunction = new File(output + "/" + folderName + "/data/" + namespace + "/functions/clear.mcfunction");
+        clearFunction.createNewFile();
+        FileWriter clearWriter = new FileWriter(clearFunction);
+        clearWriter.write(String.format("fill %s %s %s %s %s %s air", (Schematic.Location.xOffset), (Schematic.Location.yOffset), (Schematic.Location.zOffset), (Schematic.Location.xOffset + size.getX()), (Schematic.Location.yOffset + size.getY()), (Schematic.Location.zOffset + size.getZ())));
+        clearWriter.close();
+
 
         File startFunction = new File(output + "/" + folderName + "/data/" + namespace + "/functions/start.mcfunction");
         startFunction.createNewFile();
@@ -65,10 +77,9 @@ public class DataPack {
         endFunction.createNewFile();
         FileWriter endWriter = new FileWriter(endFunction);
 
-        blocks.forEach((time, block) -> {
+        events.forEach((time, name) -> {
             try {
-                String name = makeFunctionFile((long) (time * timeScale), block, time);
-                startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (long) (time * timeScale) + "t\n");
+                startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (long) (time     ) + "t\n");
                 endWriter.write("schedule clear " + namespace + ":placements/" + name + "\n");
             } catch (IOException e) {
                 e.printStackTrace();
@@ -77,15 +88,5 @@ public class DataPack {
 
         startWriter.close();
         endWriter.close();
-    }
-
-    public String makeFunctionFile(long tick, Schematic.Block block, long time) throws IOException {
-        File file = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements/" + tick + "-" + block.name + ".mcfunction");
-        file.createNewFile();
-        FileWriter writer = new FileWriter(file);
-        writer.write(String.format("setblock %s %s %s %s", block.location.getX(), block.location.getY(), block.location.getZ(), block.getFormat()) + "\n");
-        writer.write("title @a actionbar [\"\",{\"text\":\"|-=\"},{\"text\":\"" + "\u2b1b".repeat((int) (time / (double) largestTime * 10)) + "\",\"color\":\"aqua\"},{\"text\":\"" + "\u2b1b".repeat((int) (10 - time / (double) largestTime * 10)) + "\",\"color\":\"gray\"},{\"text\":\"=-| \"}]");
-        writer.close();
-        return tick + "-" + block.hashCode();
     }
 }
