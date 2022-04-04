@@ -3,28 +3,23 @@ package me.melonboy10.midi2building;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
 
 public class DataPack {
 
     private final String output;
     private final String folderName = "Midi2Building";
     private final String namespace = "midi2building";
-    private final HashMap<Long, String> events = new HashMap<>();
+    private final ArrayList<NoteEvent> events = new ArrayList<>();
     public long largestTime = 0;
     public Schematic.Location size;
-    private double timeScale = 0.1;
 
     public DataPack(String datapackOutput) {
         this.output = datapackOutput;
     }
 
-    public void addEvent(Long time, String fileName){
-        events.put(time, fileName);
-    }
-
-    public void setTimeScale(double timeScale) {
-        this.timeScale = timeScale;
+    public void addEvent(NoteEvent noteEvent){
+        events.add(noteEvent);
     }
 
     public String getPath(){
@@ -77,9 +72,13 @@ public class DataPack {
         endFunction.createNewFile();
         FileWriter endWriter = new FileWriter(endFunction);
 
-        events.forEach((time, name) -> {
+
+
+        events.forEach((event) -> {
+            String name = event.getFileName();
+            long time = event.getTick();
             try {
-                startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (long) (time     ) + "t\n");
+                startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (time+1) + "t\n");
                 endWriter.write("schedule clear " + namespace + ":placements/" + name + "\n");
             } catch (IOException e) {
                 e.printStackTrace();

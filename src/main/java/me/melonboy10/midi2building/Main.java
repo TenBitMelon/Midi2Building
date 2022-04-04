@@ -57,15 +57,18 @@ public class Main {
         Schematic schematic = new Schematic(nbt);
         schematic.copyBlocks();
         DataPack dataPack = new DataPack(datapackOutput);
-        double timeScale = 0.1;
+        double timeScale = 0.01;
 
         long largestTime = 0;
         for (Note note : parser.getNotes()) {
             NoteEvent key = noteToSound.get(note.getNote());
             if (key != null) {
-                key.makeFunctionFile(dataPack.getPath() + "/functions/placements/", (long) (note.getTime() * timeScale), note.getTime());
+                key = key.copy();
+                if (key.makeFunctionFile(dataPack.getPath() + "/functions/placements/", (long) (note.getTime() * timeScale), note.getTime())) {
+                    dataPack.addEvent(key);
+                }
                 largestTime = Math.max(largestTime, note.getTime());
-                dataPack.addEvent((long) (note.getTime() * timeScale), key.getFileName());
+
             } else {
                 //System.out.println("!!! Found note without block matching !!! " + note.getNote());
             }
