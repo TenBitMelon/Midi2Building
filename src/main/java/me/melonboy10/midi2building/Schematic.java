@@ -16,6 +16,7 @@ public class Schematic {
     ArrayList<Block> blocksCopy = new ArrayList<>();
     HashMap<Integer, String> paletteIds = new HashMap<>();
     Location size;
+    HashMap<SoundAtlas, NoteEvent> noteEvents = new HashMap<>();
 
     public Schematic(File file) {
         this.file = file;
