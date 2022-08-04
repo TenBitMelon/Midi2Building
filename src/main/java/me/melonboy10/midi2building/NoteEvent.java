@@ -1,14 +1,34 @@
 package me.melonboy10.midi2building;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
-public interface NoteEvent {
+@EqualsAndHashCode
+public abstract class NoteEvent {
 
-    boolean makeFunctionFile(String path, long tick, long time) throws IOException;
+    @Getter private long tick;
+    @Getter private Schematic.Location location;
+    @Getter private File file;
+    @Getter private SoundAtlas sound;
 
-    NoteEvent copy();
+    public NoteEvent(long tick, Schematic.Location location, SoundAtlas sound) {
+        this.tick = tick;
+        this.location = location;
+        this.sound = sound;
+    }
 
-    String getFileName();
+    public File makeFunctionFile(String path, long tick, long time) throws IOException {
+        file = new File(path + tick + "-" + this.hashCode() + ".mcfunction");
+        file.createNewFile();
+        FileWriter writer = new FileWriter(file);
+        writer.write(getFileContents());
+        writer.close();
+        return file;
+    }
 
-    long getTick();
+    abstract public String getFileContents();
 }
