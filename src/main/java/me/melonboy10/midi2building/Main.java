@@ -59,15 +59,26 @@ public class Main {
         double timeScale = 0.01;
 
         long largestTime = 0;
+        schematic.copyBlocks();
         for (Note note : parser.getNotes()) {
             SoundAtlas sound = noteToSound.get(note.getNote());
             if (sound != null) {
-
-                if (NoteEvent.genBlockPlaceFunction(dataPack.getPath() + "/functions/placements/", (long) (note.getTime() * timeScale), note.getTime())) {
-                    dataPack.addEvent(sound);
+                long tick = (long) (note.getTime() * timeScale);
+                long noteTime = note.getTime();
+                // new PlaceEntityEvent(tick, schematic.getEntity(sound), sound)
+                NoteEvent event = null;
+                switch (sound.soundSource) {
+                    case BLOCK -> {
+                        Schematic.Block block = schematic.getAndRemoveBlock(sound);
+                        if (block != null) event = new PlaceBlockEvent(tick, block, sound);
+                    }
+                    case ENTITY -> event = null;
                 }
-                largestTime = Math.max(largestTime, note.getTime());
 
+                if (event != null) {
+                    dataPack.addEvent(event);
+                    largestTime = Math.max(largestTime, note.getTime());
+                }
             } else {
                 //System.out.println("!!! Found note without block matching !!! " + note.getNote());
             }
@@ -77,9 +88,9 @@ public class Main {
         dataPack.largestTime = largestTime;
         dataPack.generate();
 
-        for (Schematic.Block block : PlaceBlockEvent.schematic.blocksCopy){
-            if(!block.name.equals("air"))
-                System.out.println(block);
-        }
+//        for (Schematic.Block block : PlaceBlockEvent.schematic.blocksCopy){
+//            if(!block.name.equals("air"))
+//                System.out.println(block);
+//        }
     }
 }
