@@ -7,6 +7,7 @@ import net.querz.nbt.tag.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class Schematic {
@@ -14,13 +15,11 @@ public class Schematic {
     File file;
     ArrayList<Block> blocks = new ArrayList<>();
     ArrayList<Block> blocksCopy = new ArrayList<>();
-    HashMap<Integer, String> paletteIds = new HashMap<>();
+    HashMap<Integer, String[]> paletteIds = new HashMap<>();
     Location size;
-    HashMap<SoundAtlas, NoteEvent> noteEvents = new HashMap<>();
 
     public Schematic(File file) {
         this.file = file;
-
 
         try {
             NamedTag namedTag = NBTUtil.read(file);
@@ -31,14 +30,20 @@ public class Schematic {
             final int[] index = {0};
             ((ListTag<?>) ((CompoundTag) namedTag.getTag()).get("palette")).forEach(tag -> {
                 final String blockName = ((StringTag) ((CompoundTag) tag).get("Name")).getValue();
-                paletteIds.put(index[0], blockName.replace("minecraft:", ""));
+                ArrayList<String> blockProps = new ArrayList<>();
+                if (((CompoundTag) tag).containsKey("Properties")) {
+                    ((CompoundTag) ((CompoundTag) tag).get("Properties")).forEach(stringTagEntry -> {
+                        blockProps.add(stringTagEntry.getKey() + "=" + stringTagEntry.getValue().valueToString());
+                    });
+                }
+                paletteIds.put(index[0], new String[]{blockName.replace("minecraft:", ""), String.join(", ", blockProps)});
                 index[0]++;
             });
             ((ListTag<?>) ((CompoundTag) namedTag.getTag()).get("blocks")).forEach(tag -> {
                 int paletteBlockId = Integer.parseInt(((CompoundTag) tag).get("state").valueToString());
                 final ListTag<?> pos = (ListTag<?>) ((CompoundTag) tag).get("pos");
-                String block = paletteIds.get(paletteBlockId);
-                blocks.add(new Block(block, "", new Location(((IntTag) pos.get(0)).asInt(), ((IntTag) pos.get(1)).asInt(), ((IntTag) pos.get(2)).asInt())));
+                String[] block = paletteIds.get(paletteBlockId);
+                blocks.add(new Block(block[0], block[1], new Location(((IntTag) pos.get(0)).asInt(), ((IntTag) pos.get(1)).asInt(), ((IntTag) pos.get(2)).asInt())));
             });
         } catch (IOException e) {
             System.out.println("Failed to read schematic file.");
@@ -87,13 +92,14 @@ public class Schematic {
         @Override
         public String toString() {
             return "Block{" +
-                    "name='" + name + '\'' +
+                    "name='" + name + "'" +
                     ", location=" + location +
-                    ", properties='" + properties + '\'' +
+                    ", properties='" + properties + "'" +
                     '}';
         }
 
-        public String getFormat() {
+        public String getFormatted() {
+            System.out.println(properties);
             return "minecraft:" + name + (properties.isEmpty() ? "" : "[" + properties + "]");
         }
     }

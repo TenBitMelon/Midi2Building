@@ -63,7 +63,6 @@ public class DataPack {
         clearWriter.write(String.format("fill %s %s %s %s %s %s air", (Schematic.Location.xOffset), (Schematic.Location.yOffset), (Schematic.Location.zOffset), (Schematic.Location.xOffset + size.getX()), (Schematic.Location.yOffset + size.getY()), (Schematic.Location.zOffset + size.getZ())));
         clearWriter.close();
 
-
         File startFunction = new File(output + "/" + folderName + "/data/" + namespace + "/functions/start.mcfunction");
         startFunction.createNewFile();
         FileWriter startWriter = new FileWriter(startFunction);
@@ -72,10 +71,9 @@ public class DataPack {
         endFunction.createNewFile();
         FileWriter endWriter = new FileWriter(endFunction);
 
-
-
         events.forEach((event) -> {
-            String name = event.getFileName();
+            File file = event.makeFunctionFile(output + "/" + folderName + "/data/" + namespace + "/functions/placements/");
+            String name = file.getName().replaceAll(".mcfunction", "");
             long time = event.getTick();
             try {
                 startWriter.write("schedule function " + namespace + ":placements/" + name + " " + (time+1) + "t\n");
