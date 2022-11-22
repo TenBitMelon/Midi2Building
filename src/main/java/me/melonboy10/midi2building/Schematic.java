@@ -15,6 +15,7 @@ public class Schematic {
     File file;
     ArrayList<Block> blocks = new ArrayList<>();
     ArrayList<Block> blocksCopy = new ArrayList<>();
+    HashMap<SoundAtlas, Location> soundSnakes = new HashMap<>();
     HashMap<Integer, String[]> paletteIds = new HashMap<>();
     Location size;
 
@@ -49,13 +50,31 @@ public class Schematic {
             System.out.println("Failed to read schematic file.");
             e.printStackTrace();
         }
+
+        copyBlocks();
     }
 
     public Block getBlock(SoundAtlas sound) {
-        for (Block block : blocks) {
-            if (sound == null || sound.blocks.contains(block.name.toUpperCase())) return block;
+        Location lastLocation = soundSnakes.getOrDefault(sound, null);
+        final Block[] nextBlock = {null};
+
+        if (lastLocation != null) {
+            blocksCopy.stream().filter(block -> sound.blocks.contains(block.name) && block.location.isNextTo(lastLocation)).findFirst().ifPresent(block -> {
+                nextBlock[0] = block;
+                soundSnakes.put(sound, nextBlock[0].location);
+                blocksCopy.remove(block);
+            });
         }
-        return null;
+
+        if (lastLocation == null || nextBlock[0] == null) {
+            blocksCopy.stream().filter(block -> sound.blocks.contains(block.name.toUpperCase())).findFirst().ifPresent(block -> {
+                nextBlock[0] = block;
+                soundSnakes.put(sound, nextBlock[0].location);
+                blocksCopy.remove(block);
+            });
+        }
+
+        return nextBlock[0];
     }
 
     public Block getAndRemoveBlock(SoundAtlas sound) {
@@ -99,7 +118,6 @@ public class Schematic {
         }
 
         public String getFormatted() {
-            System.out.println(properties);
             return "minecraft:" + name + (properties.isEmpty() ? "" : "[" + properties + "]");
         }
     }
@@ -118,6 +136,27 @@ public class Schematic {
             this.x = x;
             this.y = y;
             this.z = z;
+        }
+
+        public Location add(Location loc) {
+            return new Location(this.x + loc.x, this.y + loc.y, this.z + loc.z);
+        }
+
+        public Location subtract(Location loc) {
+            return new Location(this.x - loc.x, this.y - loc.y, this.z - loc.z);
+        }
+
+        public int addValues() {
+            return this.x + this.y + this.z;
+        }
+
+        public boolean isNextTo(Location loc) {
+            return (this.x == loc.x && this.y == loc.y && this.z == loc.z + 1) ||
+                    (this.x == loc.x && this.y == loc.y && this.z == loc.z - 1) ||
+                    (this.x == loc.x && this.y == loc.y + 1 && this.z == loc.z) ||
+                    (this.x == loc.x && this.y == loc.y - 1 && this.z == loc.z) ||
+                    (this.x == loc.x + 1 && this.y == loc.y && this.z == loc.z) ||
+                    (this.x == loc.x - 1 && this.y == loc.y && this.z == loc.z);
         }
 
         public void setOffsets(int xOffset, int yOffset, int zOffset){

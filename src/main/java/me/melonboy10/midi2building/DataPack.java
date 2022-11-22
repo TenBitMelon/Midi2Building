@@ -29,7 +29,7 @@ public class DataPack {
 
     public void generate() throws IOException {
         if (events.isEmpty()) try {
-            throw new Exception("No blocks found in schematic");
+            throw new Exception("No events in DataPack");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,7 +72,6 @@ public class DataPack {
         endFunction.createNewFile();
         FileWriter endWriter = new FileWriter(endFunction);
 
-        // TODO: Delete old files
         for (File file : placementsFolder.listFiles(pathname -> {
             String name = pathname.getName();
             String extenstion = name.substring(name.lastIndexOf("."));

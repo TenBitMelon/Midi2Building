@@ -1,5 +1,7 @@
 package me.melonboy10.midi2building;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +12,7 @@ public class Main {
 
     static String datapackOutput;
     static File song = new File("src/main/resources/defaultSongs/ThumbnailFull.mid");
-    public static File nbt = new File("src/main/resources/palette_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
+    public static File nbt = new File("src/main/resources/tiny_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
     static HashMap<String, SoundAtlas> noteToSound = new HashMap<>(){{
         put("1C",   SoundAtlas.DEEPSLATE); //
         put("1C#",  SoundAtlas.STONE); //
@@ -52,14 +54,23 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         MidiParser parser = new MidiParser(song);
+
+        HashMap<String, Integer> noteCount = parser.getNoteCount();
         System.out.println(parser.getNoteCount());
+        HashMap<SoundAtlas, Integer> soundCount = new HashMap<>();
+        for (String note : noteCount.keySet()) {
+            SoundAtlas sound = noteToSound.get(note);
+            if (sound != null) {
+                soundCount.put(sound, noteCount.get(note));
+            }
+        }
+        System.out.println(soundCount);
+
         Schematic schematic = new Schematic(nbt);
-        schematic.copyBlocks();
         DataPack dataPack = new DataPack(datapackOutput);
         double timeScale = 0.01;
 
         long largestTime = 0;
-        schematic.copyBlocks();
         for (Note note : parser.getNotes()) {
             SoundAtlas sound = noteToSound.get(note.getNote());
             if (sound != null) {
@@ -69,7 +80,7 @@ public class Main {
                 NoteEvent event = null;
                 switch (sound.soundSource) {
                     case BLOCK -> {
-                        Schematic.Block block = schematic.getAndRemoveBlock(sound);
+                        Schematic.Block block = schematic.getBlock(sound);
                         if (block != null) event = new PlaceBlockEvent(tick, block, sound);
                     }
                     case ENTITY -> event = null;
