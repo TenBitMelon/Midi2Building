@@ -1,6 +1,7 @@
 package me.melonboy10.midi2building;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class DataPack {
         for (File file : functionFolder.listFiles()) {
             file.delete();
         }
-        File folderGen = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
-        folderGen.mkdirs();
+        File placementsFolder = new File(output + "/" + folderName + "/data/" + namespace + "/functions/placements");
+        placementsFolder.mkdirs();
 
         // ----- MC META -----
 
@@ -70,6 +71,15 @@ public class DataPack {
         File endFunction = new File(output + "/" + folderName + "/data/" + namespace + "/functions/stop.mcfunction");
         endFunction.createNewFile();
         FileWriter endWriter = new FileWriter(endFunction);
+
+        // TODO: Delete old files
+        for (File file : placementsFolder.listFiles(pathname -> {
+            String name = pathname.getName();
+            String extenstion = name.substring(name.lastIndexOf("."));
+            return extenstion.equals(".mcfunction");
+        })) {
+            file.delete();
+        }
 
         events.forEach((event) -> {
             File file = event.makeFunctionFile(output + "/" + folderName + "/data/" + namespace + "/functions/placements/");
