@@ -12,7 +12,7 @@ public class Main {
 
     static String datapackOutput;
     static File song = new File("src/main/resources/defaultSongs/ThumbnailFull.mid");
-    public static File nbt = new File("src/main/resources/tiny_test.nbt"); // new File("src/main/resources/thumbnail.nbt");
+    public static File nbt = new File("src/main/resources/large_mansion.nbt"); // new File("src/main/resources/thumbnail.nbt");
     static HashMap<String, SoundAtlas> noteToSound = new HashMap<>(){{
         put("1C",   SoundAtlas.DEEPSLATE); //
         put("1C#",  SoundAtlas.STONE); //
@@ -68,7 +68,8 @@ public class Main {
 
         Schematic schematic = new Schematic(nbt);
         DataPack dataPack = new DataPack(datapackOutput);
-        double timeScale = 0.01;
+        double timeScale = 0.14;
+//        double timeScale = 0.01;
 
         long largestTime = 0;
         for (Note note : parser.getNotes()) {
@@ -104,4 +105,28 @@ public class Main {
 //                System.out.println(block);
 //        }
     }
+
+    /***
+     * Main class to generate the blocks for each sound
+     *//*
+    public static void main(String[] args) throws IOException {
+        DataPack dataPack = new DataPack(datapackOutput);
+        Schematic.Location startingLocation = new Schematic.Location(52, 58, -114);
+        int offset = 0;
+        int height = 25;
+
+        for (SoundAtlas sound : SoundAtlas.values()) {
+            int i = 0;
+            for (String block : sound.blocks) {
+                dataPack.addEvent(new PlaceBlockEvent(0, new Schematic.Block("white_concrete", "", startingLocation.add(offset + (i / height), i % height - 1, -(i % height))), sound));
+                dataPack.addEvent(new PlaceBlockEvent(0, new Schematic.Block(block.toLowerCase(), "", startingLocation.add(offset + (i / height), i % height, -(i % height))), sound));
+                i++;
+            }
+            offset += sound.blocks.size() / height + 2;
+        }
+
+        dataPack.size = new Schematic.Location(0, 0, 0);
+        dataPack.largestTime = 1000;
+        dataPack.generate();
+    }*/
 }

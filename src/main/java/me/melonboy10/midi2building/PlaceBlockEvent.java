@@ -17,6 +17,7 @@ public class PlaceBlockEvent extends NoteEvent {
 
     @Override
     public String getFileContents() {
+        // Add check for special blocks like farmland or filled cauldrons to add special animations
         return new StringBuilder()
             // Add check for special blocks like farmland or filled cauldrons to add special animations
             .append(String.format("setblock %s %s %s %s", block.location.getX(), block.location.getY(), block.location.getZ(), block.getFormatted()))
@@ -26,6 +27,14 @@ public class PlaceBlockEvent extends NoteEvent {
             .append("\",\"color\":\"aqua\"},{\"text\":\"")
             .append("\u2b1b".repeat((int) (10 - tick / (double) tick * 10)))
             .append("\",\"color\":\"gray\"},{\"text\":\"=-| \"}]")
+            .append("\n")
+//            .append("playsound minecraft:block.note_block.harp @a ~ ~ ~ 1 1")
+//            .append("\n")
+//            .append("summon item -8 5 -13 {Age:-32768,Item:{id:\"minecraft:")
+//            .append(block.name)
+//            .append("\",Count:1b,tag:{display:{Name:'{\"text\":\"")
+//            .append(tick)
+//            .append("\"}'}}}}")
             .toString();
 //            writer.write(String.format("setblock %s %s %s %s", SchemBlock.location.getX(), SchemBlock.location.getY(), SchemBlock.location.getZ(), SchemBlock.getFormated()) + "\n");
 //            //writer.write("title @a actionbar [\"\",{\"text\":\"|-=\"},{\"text\":\"" + "\u2b1b".repeat((int) (time / (double) largestTime * 10)) + "\",\"color\":\"aqua\"},{\"text\":\"" + "\u2b1b".repeat((int) (10 - time / (double) largestTime * 10)) + "\",\"color\":\"gray\"},{\"text\":\"=-| \"}]");

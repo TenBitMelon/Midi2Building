@@ -2,6 +2,12 @@
 This is the generator branch for the Midi2Building project.\
 The UI and combined project are under the main branch but to keep files clean the generator is coded separately then combined.
 
+## TODO:
+- [ ] Add 1.19 block sounds
+- [ ] Create a structure that has blocks in the correct order
+- [ ] Add more events
+- [ ] Add handling for double blocks
+
 ## File Structure
 ```text
 ┣ DataPack

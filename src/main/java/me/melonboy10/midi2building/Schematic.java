@@ -7,12 +7,17 @@ import net.querz.nbt.tag.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Schematic {
 
     File file;
+    public static final ArrayList<String> EXCLUDED_BLOCKS = new ArrayList<>() {{
+        add("air");
+        add("cave_air");
+        add("void_air");
+    }};
     ArrayList<Block> blocks = new ArrayList<>();
     ArrayList<Block> blocksCopy = new ArrayList<>();
     HashMap<SoundAtlas, Location> soundSnakes = new HashMap<>();
@@ -34,8 +39,8 @@ public class Schematic {
                 ArrayList<String> blockProps = new ArrayList<>();
                 if (((CompoundTag) tag).containsKey("Properties")) {
                     ((CompoundTag) ((CompoundTag) tag).get("Properties")).forEach(stringTagEntry -> {
-                        blockProps.add(stringTagEntry.getKey() + "=" + stringTagEntry.getValue().valueToString());
-                    });
+                    blockProps.add(stringTagEntry.getKey() + "=" + stringTagEntry.getValue().valueToString());
+                });
                 }
                 paletteIds.put(index[0], new String[]{blockName.replace("minecraft:", ""), String.join(", ", blockProps)});
                 index[0]++;
@@ -44,7 +49,9 @@ public class Schematic {
                 int paletteBlockId = Integer.parseInt(((CompoundTag) tag).get("state").valueToString());
                 final ListTag<?> pos = (ListTag<?>) ((CompoundTag) tag).get("pos");
                 String[] block = paletteIds.get(paletteBlockId);
-                blocks.add(new Block(block[0], block[1], new Location(((IntTag) pos.get(0)).asInt(), ((IntTag) pos.get(1)).asInt(), ((IntTag) pos.get(2)).asInt())));
+                if (!EXCLUDED_BLOCKS.contains(block[0])) {
+                    blocks.add(new Block(block[0], block[1], new Location(((IntTag) pos.get(0)).asInt(), ((IntTag) pos.get(1)).asInt(), ((IntTag) pos.get(2)).asInt())));
+                }
             });
         } catch (IOException e) {
             System.out.println("Failed to read schematic file.");
@@ -58,12 +65,20 @@ public class Schematic {
         Location lastLocation = soundSnakes.getOrDefault(sound, null);
         final Block[] nextBlock = {null};
 
+        System.out.println("lastLocation = " + lastLocation);
         if (lastLocation != null) {
-            blocksCopy.stream().filter(block -> sound.blocks.contains(block.name) && block.location.isNextTo(lastLocation)).findFirst().ifPresent(block -> {
-                nextBlock[0] = block;
+            List<Block> aroundBlocks = blocksCopy.stream().filter(block -> sound.blocks.contains(block.name.toUpperCase()) && block.location.isAround(lastLocation)).toList();
+            List<Block> nextToBlocks = aroundBlocks.stream().filter(block -> block.location.isNextTo(lastLocation)).toList();
+            if (!nextToBlocks.isEmpty()) {
+                nextBlock[0] = nextToBlocks.get(0);
+            } else {
+                nextBlock[0] = aroundBlocks.isEmpty() ? null : aroundBlocks.get(0);
+            }
+            if (nextBlock[0] != null) {
                 soundSnakes.put(sound, nextBlock[0].location);
-                blocksCopy.remove(block);
-            });
+                blocksCopy.remove(nextBlock[0]);
+                System.out.println("found next to");
+            }
         }
 
         if (lastLocation == null || nextBlock[0] == null) {
@@ -96,7 +111,7 @@ public class Schematic {
         }
     }
 
-    class Block {
+    public static class Block {
 
         String name;
         Location location;
@@ -122,7 +137,7 @@ public class Schematic {
         }
     }
 
-    class Location {
+    public static class Location {
 
         public static int xOffset = 0;
         public static int yOffset = 1;
@@ -159,6 +174,35 @@ public class Schematic {
                     (this.x == loc.x - 1 && this.y == loc.y && this.z == loc.z);
         }
 
+        public boolean isAround(Location loc) {
+            return (this.x == loc.x && this.y == loc.y && this.z == loc.z + 1) ||
+                    (this.x == loc.x && this.y == loc.y && this.z == loc.z - 1) ||
+                    (this.x == loc.x && this.y == loc.y + 1 && this.z == loc.z) ||
+                    (this.x == loc.x && this.y == loc.y - 1 && this.z == loc.z) ||
+                    (this.x == loc.x + 1 && this.y == loc.y && this.z == loc.z) ||
+                    (this.x == loc.x - 1 && this.y == loc.y && this.z == loc.z) ||
+                    (this.x == loc.x && this.y == loc.y + 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x && this.y == loc.y + 1 && this.z == loc.z - 1) ||
+                    (this.x == loc.x && this.y == loc.y - 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x && this.y == loc.y - 1 && this.z == loc.z - 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y && this.z == loc.z + 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y && this.z == loc.z - 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y && this.z == loc.z + 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y && this.z == loc.z - 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y + 1 && this.z == loc.z) ||
+                    (this.x == loc.x + 1 && this.y == loc.y - 1 && this.z == loc.z) ||
+                    (this.x == loc.x - 1 && this.y == loc.y + 1 && this.z == loc.z) ||
+                    (this.x == loc.x - 1 && this.y == loc.y - 1 && this.z == loc.z) ||
+                    (this.x == loc.x + 1 && this.y == loc.y + 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y + 1 && this.z == loc.z - 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y - 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x + 1 && this.y == loc.y - 1 && this.z == loc.z - 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y + 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y + 1 && this.z == loc.z - 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y - 1 && this.z == loc.z + 1) ||
+                    (this.x == loc.x - 1 && this.y == loc.y - 1 && this.z == loc.z - 1);
+        }
+
         public void setOffsets(int xOffset, int yOffset, int zOffset){
             Location.xOffset = xOffset;
             Location.yOffset = yOffset;
@@ -184,6 +228,10 @@ public class Schematic {
                     ", y=" + y +
                     ", z=" + z +
                     '}';
+        }
+
+        public Location add(int x, int y, int z) {
+            return new Location(this.x + x, this.y + y, this.z + z);
         }
     }
 }
